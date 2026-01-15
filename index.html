@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+  
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  background-image: url("background.jpg");
+  background-color: red;
+  background-size: cover;
+  background-position: center;
+
+  filter: blur(4px) brightness(0.7);
+  transform: scale(1.1);
+}
+  
+body {
+  font-family: 'Inter', sans-serif;
+  background: transparent;
+  color: #eee;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* cała strona */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* nagłówek */
+.header {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 88px;
+  letter-spacing: 3px;
+  color: #470000;
+  text-shadow:
+    0 0 4px #3b3b3b,
+    0 0 8px #3b3b3b,
+    0 0 12px #3b3b3b;
+}
+
+.table-container {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px 25px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+
+
+/* logo */
+.logo {
+  margin-top: 15px;
+  max-width: 600px;
+  height: auto;
+}
+
+/* kontener rankingu */
+.ranking-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* tabela */
+/* usuń border i border-image z samej tabeli */
+table {
+  border: none;
+  border-collapse: collapse;
+  width: 100%; /* teraz tabela dopasowuje się do wrappera */
+  max-width: 1000px;
+}
+
+
+.table-wrapper {
+  position: relative;
+  display: inline-block;
+  border-radius: 16px;   /* zaokrąglone rogi */
+}
+
+/* pseudo-element jako ramka „na zewnątrz” */
+.table-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -4px;             /* przesunięcie na zewnątrz */
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 4px;   /* zaokrąglone rogi większe niż tabeli */
+  background: url('texture.png');
+  background-size: cover;
+  pointer-events: none;  /* nie zasłania tabeli */
+  z-index: -1;           /* pod tabelą */
+}
+
+th, td {
+  padding: 8px 10px;
+  border: 1px solid #555; /* wszystkie krawędzie */
+  text-align: center;
+  vertical-align: middle;  /* pionowe wyśrodkowanie */
+}
+
+th, td:not(:has(.cell-content)) {
+  text-align: center;
+  vertical-align: middle;
+}
+
+th {
+  background: #222;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+tr:nth-child(odd) {
+  background-color: rgba(25, 25, 25, 0.6);
+}
+
+.cell-content {
+  display: flex;
+  align-items: center;      /* pionowe wyśrodkowanie ikony i nazwy gracza */
+  justify-content: center;  /* poziome wyśrodkowanie całości */
+  gap: 6px;                 /* odstęp między ikoną a nazwą gracza */
+}
+
+.rank {
+  display: inline-flex;
+  align-items: center;      /* ikona + nazwa rangi wyśrodkowane pionowo */
+  gap: 4px;                 /* odstęp między ikoną a nazwą rangi */
+}
+
+.rank-icon {
+  width: 35px;
+  height: 35px;
+  object-fit: contain;
+}
+
+.rank-name {
+  font-size: 15px;
+  font-weight: 600; /* opcjonalnie pogrubienie */
+}
+
+#.rank-muszkieter {
+#  text-shadow:
+#    0 0 4px #1e90ff,
+#    0 0 8px #1e90ff,
+#    0 0 12px #1e90ff;
+#}
+
+#.rank-muszkieter .rank-icon {
+#  filter: drop-shadow(0 0 6px #1e90ff);
+#}
+
+#@keyframes legendGlow {
+#  0% {
+#    text-shadow: 0 0 4px #1e90ff;
+#  }
+#  50% {
+#    text-shadow: 0 0 12px #1e90ff;
+#  }
+#  100% {
+#    text-shadow: 0 0 4px #1e90ff;
+#  }
+#}
+
+#.rank-muszkieter {
+#  animation: legendGlow 2s infinite ease-in-out;
+#}
+
+.discord-wrapper {
+  display: flex;
+  justify-content: center; /* wyśrodkowanie poziome */
+  margin-top: 20px;        /* odstęp od tabeli */
+}
+
+.discord-wrapper a {
+  display: block;
+  width: 320px;             /* rozmiar ikonki */
+  height: 80px;
+  cursor: pointer;
+}
+
+.discord-wrapper a .discord-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.discord-wrapper a:hover .discord-icon {
+  transform: scale(1.1);   /* efekt powiększenia przy hover */
+}
+
+.load-more-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+#load-more-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#load-more-btn:hover {
+  background-color: #222;
+}
+
+/* TŁO WIERSZA ZALEŻNE OD RANGI */
+
+tr.rank-galgan td {
+  background-color: rgba(219, 124, 154, 0.18);
+}
+
+tr.rank-czern td {
+  background-color: rgba(232, 195, 84, 0.18);
+}
+
+tr.rank-muszkieter td {
+  background-color: rgba(189, 189, 189, 0.18);
+}
+
+tr.rank-tatar td {
+  background-color: rgba(37, 119, 204, 0.18);
+}
+
+tr.rank-dragon td {
+  background-color: rgba(255, 140, 0, 0.18);
+}
+
+tr.rank-rezun td {
+  background-color: rgba(120, 171, 103, 0.18);
+}
+
+tr.rank-rajtar td {
+  background-color: rgba(247, 192, 101, 0.18);
+}
+
+tr.rank-chorazy td {
+  background-color: rgba(255, 214, 55, 0.18);
+}
+
+tr.rank-oficer td {
+  background-color: rgba(242, 193, 229, 0.18);
+}
+
+tr.rank-szlachcic td {
+  background-color: rgba(247, 237, 215, 0.25);
+}
+
+tr.rank-husarz td {
+  background-color: rgba(201, 26, 26, 0.18);
+}
+
+tr.rank-hetman td {
+  background-color: rgba(241, 124, 4, 0.18);
+}
+
+tr.rank-imperator td {
+  background-color: rgba(255, 215, 0, 0.18);
+}
+
+  </style>
+</head>
+<body>
+
+<div class="background"></div>
+
+  <header class="header">
+    <h1>Deluge MMs</h1>
+    <img src="logo2.png" alt="Deluge logo" class="logo">
+  </header>
+
+<div class="ranking-wrapper">
+  <div class="table-wrapper">
+    <table id="ranking">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="load-more-wrapper">
+  <button id="load-more-btn">Pokaż więcej</button>
+</div>
+
+
+<div class="discord-wrapper">
+  <a href="https://discord.gg/ARvsN9NVXM" target="_blank" rel="noopener noreferrer">
+    <img src="discord-icon.png" alt="Discord" class="discord-icon">
+  </a>
+</div>
+
+
+  <script src="script.js"></script>
+
+</body>
+<script src="script.js"></script>
+</html>
+
