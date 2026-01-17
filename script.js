@@ -15,6 +15,7 @@ const url =
   `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?` +
   `sheet=${encodeURIComponent(SHEET_NAME)}` +
   `&tq=${encodeURIComponent(query)}`;
+  `&cachebuster=${Date.now()}`;
 
 fetch(url)
   .then(res => res.text())
@@ -201,6 +202,7 @@ if (searchInput) {
 }
 
 }
+
 
 
 
