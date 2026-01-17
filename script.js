@@ -3,6 +3,10 @@ const SHEET_NAME = "ranking";
 let allRows = [];   
 let displayed = 0;  
 let filteredRows = [];
+const contributors = [
+  "Snykas",
+  "Kimono"
+];
 
 
 const query = `
@@ -14,7 +18,7 @@ const query = `
 const url =
   `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?` +
   `sheet=${encodeURIComponent(SHEET_NAME)}` +
-  `&tq=${encodeURIComponent(query)}`;
+  `&tq=${encodeURIComponent(query)}` +
   `&cachebuster=${Date.now()}`;
 
 fetch(url)
@@ -106,6 +110,16 @@ allRows.forEach((row, index) => {
   row.rankPosition = index + 1;
 });
 
+const leaderBox = document.getElementById("leader");
+if (leaderBox && allRows.length > 0) {
+  leaderBox.textContent = allRows[0].c[0].v; // nick top gracza
+}
+
+
+
+const pc = document.getElementById("player-count");
+if (pc) pc.textContent = allRows.length;
+
 
   filteredRows = allRows;
   displayed = 0;
@@ -143,17 +157,19 @@ rowHtml += `<td>${rankDisplay}</td>`;
           const elo = row.c[1]?.v ?? 1000;
           const rank = getRank(elo);
 
-          rowHtml += `
-            <td>
-              <div class="cell-content">
-                <span class="rank ${rank.className}" style="color:${rank.color}">
-                  <img src="${rank.icon}" class="rank-icon" alt="${rank.name}">
-                  <span class="rank-name">${rank.name}</span>
-                </span>
-                <span class="player-name">${cell.v}</span>
-              </div>
-            </td>
-          `;
+const isContributor = contributors.includes(cell.v);
+
+rowHtml += `
+  <td>
+    <div class="cell-content">
+      <span class="rank ${rank.className}" style="color:${rank.color}">
+        <img src="${rank.icon}" class="rank-icon" alt="${rank.name}">
+        <span class="rank-name">${rank.name}</span>
+      </span>
+      <span class="player-name${isContributor ? " contributor-glow" : ""}">${cell.v}</span>
+    </div>
+  </td>
+`;
           return;
         }
 
