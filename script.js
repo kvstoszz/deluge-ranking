@@ -88,11 +88,12 @@ function renderTable(table) {
   const thead = document.querySelector("#ranking thead");
   const tbody = document.querySelector("#ranking tbody");
 
-  thead.innerHTML = `
-    <tr>
-      ${table.cols.map(c => `<th>${c.label}</th>`).join("")}
-    </tr>
-  `;
+thead.innerHTML = `
+  <tr>
+    <th>#</th>
+    ${table.cols.map(c => `<th>${c.label}</th>`).join("")}
+  </tr>
+`;
 
   const winrateColIndex = table.cols.findIndex(c => c.label === "Win %");
   const kdColIndex = table.cols.findIndex(c => c.label === "KD");
@@ -101,6 +102,10 @@ allRows = table.rows.filter(row => {
   const nickCell = row.c[0];
   return nickCell && typeof nickCell.v === "string" && nickCell.v.trim() !== "";
 });
+allRows.forEach((row, index) => {
+  row.rankPosition = index + 1;
+});
+
 
   filteredRows = allRows;
   displayed = 0;
@@ -114,6 +119,8 @@ allRows = table.rows.filter(row => {
 
     nextRows.forEach(row => {
       let rowHtml = "";
+	  rowHtml += `<td>${row.rankPosition}</td>`;
+
 
       row.c.forEach((cell, i) => {
         if (!cell) {
@@ -202,6 +209,7 @@ if (searchInput) {
 }
 
 }
+
 
 
 
