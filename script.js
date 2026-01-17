@@ -2,6 +2,7 @@ const SPREADSHEET_ID = "1KBHt_-c7aBGze2fETxpU9eITrJMT--epxXZDQnaxwus";
 const SHEET_NAME = "ranking";
 let allRows = [];   
 let displayed = 0;  
+let filteredRows = [];
 
 
 const query = `
@@ -42,7 +43,7 @@ function getRank(elo) {
     return { name: "Tatar Krymski", color: "#001b44", icon: "ranks/tatar.png", className: "rank-tatar" };
   }
   if (elo < 1601) {
-    return { name: "Dragon", color: "#ff8c00", icon: "ranks/czern.png", className: "rank-dragon" };
+    return { name: "Dragon", color: "#154115", icon: "ranks/dragon.png", className: "rank-dragon" };
   }
   if (elo < 1801) {
     return { name: "Rezun", color: "#78ab67", icon: "ranks/rezun.png", className: "rank-rezun" };
@@ -95,14 +96,20 @@ function renderTable(table) {
   const winrateColIndex = table.cols.findIndex(c => c.label === "Win %");
   const kdColIndex = table.cols.findIndex(c => c.label === "KD");
 
-  allRows = table.rows;
+allRows = table.rows.filter(row => {
+  const nickCell = row.c[0];
+  return nickCell && typeof nickCell.v === "string" && nickCell.v.trim() !== "";
+});
+
+  filteredRows = allRows;
   displayed = 0;
   tbody.innerHTML = "";
 
   loadMoreRows(20);
 
   function loadMoreRows(count) {
-    const nextRows = allRows.slice(displayed, displayed + count);
+    const nextRows = filteredRows.slice(displayed, displayed + count);
+
 
     nextRows.forEach(row => {
       let rowHtml = "";
@@ -162,7 +169,7 @@ tbody.innerHTML += `<tr class="${rank.className}">${rowHtml}</tr>`;
     displayed += nextRows.length;
 
     const btn = document.getElementById("load-more-btn");
-    if (btn && displayed >= allRows.length) {
+    if (btn && displayed >= filteredRows.length) {
       btn.style.display = "none";
     }
   }
@@ -171,6 +178,28 @@ tbody.innerHTML += `<tr class="${rank.className}">${rowHtml}</tr>`;
   if (btn) {
     btn.onclick = () => loadMoreRows(10);
   }
+  
+const searchInput = document.getElementById("search-input");
+
+if (searchInput) {
+  searchInput.oninput = () => {
+    const query = searchInput.value.toLowerCase();
+
+    filteredRows = allRows.filter(row => {
+      const nick = row.c[0].v.toLowerCase();
+      return nick.includes(query);
+    });
+
+    displayed = 0;
+    tbody.innerHTML = "";
+
+    const btn = document.getElementById("load-more-btn");
+    if (btn) btn.style.display = "block";
+
+    loadMoreRows(20);
+  };
+}
+
 }
 
 
