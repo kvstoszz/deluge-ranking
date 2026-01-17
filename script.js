@@ -50,7 +50,7 @@ function getRank(elo) {
     return { name: "Rezun", color: "#78ab67", icon: "ranks/rezun.png", className: "rank-rezun" };
   }
   if (elo < 2001) {
-    return { name: "Rajtar", color: "#3a1401", icon: "ranks/rajtar.png", className: "rank-rajtar" };
+    return { name: "Rajtar", color: "#3a1401", icon: "ranks/rajtar2.png", className: "rank-rajtar" };
   }
   if (elo < 2201) {
     return { name: "Chorąży", color: "#ffd637", icon: "ranks/chorazy.png", className: "rank-chorazy" };
@@ -224,5 +224,6 @@ if (searchInput) {
 }
 
 }
+
 
 
