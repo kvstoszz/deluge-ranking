@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
+  <link rel="icon" type="image/png" href="logo2.png">
+ <style>
   
 .background {
   position: fixed;
@@ -29,6 +30,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  cursor: url('cursor.png'), auto;
+}
+
+/* jeśli można zaznaczać tekst pokazuje standardową kreskę */
+p, span, h1, h2, h3, h4, h5, h6, a, td, th, label, input {
+  cursor: text;
 }
 
 /* cała strona */
@@ -499,4 +507,3 @@ tr.top-10:hover td {
 
 </body>
 </html>
-
