@@ -37,7 +37,7 @@ function getRank(elo) {
     return { name: "Czerń", color: "#deaa4a", icon: "ranks/czern.png", className: "rank-czern" };
   }
   if (elo < 1201) {
-    return { name: "Muszkieter", color: "#bdbdbd", icon: "ranks/muszkieter2.png", className: "rank-muszkieter" };
+    return { name: "Hajduk", color: "#bdbdbd", icon: "ranks/muszkieter2.png", className: "rank-muszkieter" };
   }
   if (elo < 1401) {
     return { name: "Tatar Krymski", color: "#001b44", icon: "ranks/tatar.png", className: "rank-tatar" };
@@ -201,5 +201,6 @@ if (searchInput) {
 }
 
 }
+
 
 
