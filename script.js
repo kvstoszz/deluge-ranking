@@ -119,7 +119,18 @@ allRows.forEach((row, index) => {
 
     nextRows.forEach(row => {
       let rowHtml = "";
-	  rowHtml += `<td>${row.rankPosition}</td>`;
+let rankDisplay = row.rankPosition;
+
+if (row.rankPosition === 1) {
+  rankDisplay = `<span class="rank-medal rank-1">🥇</span>`;
+} else if (row.rankPosition === 2) {
+  rankDisplay = `<span class="rank-medal rank-2">🥈</span>`;
+} else if (row.rankPosition === 3) {
+  rankDisplay = `<span class="rank-medal rank-3">🥉</span>`;
+}
+
+rowHtml += `<td>${rankDisplay}</td>`;
+
 
 
       row.c.forEach((cell, i) => {
@@ -169,7 +180,11 @@ allRows.forEach((row, index) => {
 const elo = row.c[1]?.v ?? 1000;
 const rank = getRank(elo);
 
-tbody.innerHTML += `<tr class="${rank.className}">${rowHtml}</tr>`;
+const top5Class = row.rankPosition <= 5 ? "top-5" : "";
+
+tbody.innerHTML += `<tr class="${rank.className} ${top5Class}">${rowHtml}</tr>`;
+
+
 
 
     });
@@ -209,9 +224,5 @@ if (searchInput) {
 }
 
 }
-
-
-
-
 
 

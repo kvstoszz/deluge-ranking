@@ -316,6 +316,33 @@ td:first-child {
   width: 50px;
 }
 
+.rank-medal {
+  font-size: 18px;
+}
+
+.rank-1 { color: gold; }
+.rank-2 { color: silver; }
+.rank-3 { color: #cd7f32; } /* brąz */
+
+tr.top-10 td {
+  box-shadow: inset 0 0 0 9999px rgba(255, 215, 0, 0.08);
+}
+
+tr.top-10:hover td {
+  box-shadow: inset 0 0 0 9999px rgba(255, 215, 0, 0.14);
+}
+
+/* ZŁOTY NICK + POŚWIATA — TOP 5 */
+
+.top-5 .player-name {
+  color: #dec02b; /* złoty */
+  font-weight: 700;
+  text-shadow:
+    0 0 4px rgba(255, 215, 0, 0.6),
+    0 0 8px rgba(255, 215, 0, 0.4),
+    0 0 12px rgba(255, 215, 0, 0.25);
+}
+
 
   </style>
 </head>
@@ -360,10 +387,7 @@ td:first-child {
 
   <script src="script.js"></script>
 
+
 </body>
 </html>
-
-
-
-
 
