@@ -3,6 +3,8 @@ const SHEET_NAME = "ranking";
 let allRows = [];   
 let displayed = 0;  
 let filteredRows = [];
+let comparisonPlayers = [];
+const MAX_COMPARISON_PLAYERS = 2;
 const contributors = [
   "Snykas",
   "Kimono"
@@ -75,18 +77,249 @@ function getRank(elo) {
 }
 
 function getColorByValue(value) {
-  let r, g;
-
-  if (value < 50) {
-    r = 255;
-    g = Math.round(255 * (value / 50));
+  // Spectrum gradient: Red → Orange → Yellow → Green
+  // value = 0-100 (percentage)
+  if (value < 25) {
+    // Red to Orange (0-25)
+    const t = value / 25;
+    const r = 239;
+    const g = Math.round(83 + (165 - 83) * t);
+    const b = 80;
+    return `rgb(${r}, ${g}, ${b})`;
+  } else if (value < 50) {
+    // Orange to Yellow (25-50)
+    const t = (value - 25) / 25;
+    const r = 239;
+    const g = Math.round(165 + (255 - 165) * t);
+    const b = Math.round(80 - 80 * t);
+    return `rgb(${r}, ${g}, ${b})`;
+  } else if (value < 75) {
+    // Yellow to Light Green (50-75)
+    const t = (value - 50) / 25;
+    const r = Math.round(239 - (200 - 100) * t);
+    const g = 255;
+    const b = 0;
+    return `rgb(${r}, ${g}, ${b})`;
   } else {
-    r = Math.round(255 * (1 - (value - 50) / 50));
-    g = 255;
+    // Light Green to Green (75-100)
+    const t = (value - 75) / 25;
+    const r = Math.round(100 - 50 * t);
+    const g = 255;
+    const b = 0;
+    return `rgb(${r}, ${g}, ${b})`;
   }
-
-  return `rgb(${r}, ${g}, 0)`;
 }
+
+// Porównywanie graczy - funkcje globalne
+function togglePlayerComparison(nick) {
+  const index = comparisonPlayers.indexOf(nick);
+  
+  if (index > -1) {
+    comparisonPlayers.splice(index, 1);
+  } else if (comparisonPlayers.length < MAX_COMPARISON_PLAYERS) {
+    comparisonPlayers.push(nick);
+  } else {
+    return;
+  }
+  
+  updateComparisonButton();
+}
+
+function updateComparisonButton() {
+  const comparisonBtn = document.getElementById("comparison-btn");
+  if (comparisonBtn) {
+    if (comparisonPlayers.length > 0) {
+      comparisonBtn.textContent = `Porównaj (${comparisonPlayers.length}/${MAX_COMPARISON_PLAYERS})`;
+      comparisonBtn.style.display = "block";
+      if (comparisonPlayers.length >= 1) {
+        comparisonBtn.style.opacity = "1";
+        comparisonBtn.style.cursor = "pointer";
+      } else {
+        comparisonBtn.style.opacity = "0.5";
+        comparisonBtn.style.cursor = "not-allowed";
+      }
+    } else {
+      comparisonBtn.style.display = "none";
+    }
+  }
+}
+
+function openComparison() {
+  if (comparisonPlayers.length < 1) {
+    console.error("Wybierz przynajmniej 1 gracza");
+    return;
+  }
+  
+  const player1Nick = comparisonPlayers[0];
+  const player2Nick = comparisonPlayers[1] || null;
+  
+  const row1 = allRows.find(r => r.c[0].v === player1Nick);
+  const row2 = player2Nick ? allRows.find(r => r.c[0].v === player2Nick) : null;
+  
+  if (!row1) {
+    console.error("Nie znaleziono gracza 1 w allRows");
+    return;
+  }
+  
+  const elo1 = row1.c[1]?.v ?? 1000;
+  const elo2 = row2 ? (row2.c[1]?.v ?? 1000) : null;
+  const rank1 = getRank(elo1);
+  const rank2 = row2 ? getRank(elo2) : null;
+  
+  document.getElementById("comp-player1-nick").textContent = player1Nick;
+  document.getElementById("comp-player1-rank").textContent = rank1.name;
+  document.getElementById("comp-player1-rank-img").src = rank1.icon;
+  
+  // Jeśli jest 2 gracz, pokaż go; jeśli jest sam, ukryj drugiego gracza
+  const player2Container = document.getElementById("player2-container");
+  const vsSeparator = document.getElementById("vs-separator");
+  
+  if (row2) {
+    document.getElementById("comp-player2-nick").textContent = player2Nick;
+    document.getElementById("comp-player2-rank").textContent = rank2.name;
+    document.getElementById("comp-player2-rank-img").src = rank2.icon;
+    player2Container.style.display = "flex";
+    vsSeparator.style.display = "block";
+  } else {
+    player2Container.style.display = "none";
+    vsSeparator.style.display = "none";
+  }
+  
+  // Funkcja pomocnicza do kolorowania ze spektrum gradientu
+  const updateComparisons = (val1, val2, cellId1, cellId2, display1, display2, higherIsBetter = true) => {
+    const num1 = parseFloat(val1) || 0;
+    const num2 = parseFloat(val2) || 0;
+    
+    const cell1 = document.getElementById(cellId1);
+    const cell2 = document.getElementById(cellId2);
+    
+    cell1.textContent = display1;
+    if (cell2) cell2.textContent = display2;
+    
+    // Resetuj style
+    cell1.style.fontWeight = "400";
+    cell1.style.textShadow = "";
+    cell1.style.color = "#cbbd9a";
+    if (cell2) {
+      cell2.style.fontWeight = "400";
+      cell2.style.textShadow = "";
+      cell2.style.color = "#cbbd9a";
+    }
+    
+    // Jeśli jest tylko 1 gracz, pokaż kremowy kolor
+    if (!row2) {
+      cell1.style.color = "#cbbd9a";
+      cell1.style.fontWeight = "400";
+      return;
+    }
+    
+    if (num1 === num2) {
+      cell1.style.color = "#cbbd9a";
+      cell2.style.color = "#cbbd9a";
+      cell1.style.textShadow = "0 0 2px #cbbd9a, 0 0 4px #cbbd9a";
+      cell2.style.textShadow = "0 0 2px #cbbd9a, 0 0 4px #cbbd9a";
+      cell1.style.fontWeight = "700";
+      cell2.style.fontWeight = "700";
+    } else {
+      const isBetter1 = higherIsBetter ? num1 > num2 : num1 < num2;
+      
+      const max = Math.max(num1, num2);
+      const min = Math.min(num1, num2);
+      const range = max - min || 1;
+      
+      let percent1, percent2;
+      
+      if (higherIsBetter) {
+        percent1 = ((num1 - min) / range) * 100;
+        percent2 = ((num2 - min) / range) * 100;
+      } else {
+        percent1 = ((max - num1) / range) * 100;
+        percent2 = ((max - num2) / range) * 100;
+      }
+      
+      const color1 = getColorByValue(percent1);
+      const color2 = getColorByValue(percent2);
+      
+      cell1.style.color = color1;
+      cell2.style.color = color2;
+      
+      if (isBetter1) {
+        cell1.style.fontWeight = "700";
+        cell1.style.textShadow = `0 0 2px ${color1}, 0 0 4px ${color1}`;
+        cell2.style.fontWeight = "400";
+      } else {
+        cell1.style.fontWeight = "400";
+        cell2.style.fontWeight = "700";
+        cell2.style.textShadow = `0 0 2px ${color2}, 0 0 4px ${color2}`;
+      }
+    }
+  };
+  
+  // Rating
+  updateComparisons(elo1, elo2, "comp-player1-elo-cell", "comp-player2-elo-cell", elo1, elo2, true);
+  
+  // Zabójstwa
+  const kills1 = row1.c[2]?.v ?? "--";
+  const kills2 = row2 ? (row2.c[2]?.v ?? "--") : null;
+  updateComparisons(kills1, kills2, "comp-player1-kills-cell", "comp-player2-kills-cell", kills1, kills2, true);
+  
+  // Śmierci
+  const deaths1 = row1.c[3]?.v ?? "--";
+  const deaths2 = row2 ? (row2.c[3]?.v ?? "--") : null;
+  updateComparisons(deaths1, deaths2, "comp-player1-deaths-cell", "comp-player2-deaths-cell", deaths1, deaths2, false);
+  
+  // Teamkille
+  const teamkills1 = row1.c[4]?.v ?? "--";
+  const teamkills2 = row2 ? (row2.c[4]?.v ?? "--") : null;
+  updateComparisons(teamkills1, teamkills2, "comp-player1-teamkills-cell", "comp-player2-teamkills-cell", teamkills1, teamkills2, false);
+  
+  // Wygrane
+  const wins1 = row1.c[5]?.v ?? "--";
+  const wins2 = row2 ? (row2.c[5]?.v ?? "--") : null;
+  updateComparisons(wins1, wins2, "comp-player1-wins-cell", "comp-player2-wins-cell", wins1, wins2, true);
+  
+  // Przegrane
+  const losses1 = row1.c[6]?.v ?? "--";
+  const losses2 = row2 ? (row2.c[6]?.v ?? "--") : null;
+  updateComparisons(losses1, losses2, "comp-player1-losses-cell", "comp-player2-losses-cell", losses1, losses2, false);
+  
+  // Mecze
+  const matches1 = row1.c[7]?.v ?? "--";
+  const matches2 = row2 ? (row2.c[7]?.v ?? "--") : null;
+  updateComparisons(matches1, matches2, "comp-player1-matches-cell", "comp-player2-matches-cell", matches1, matches2, true);
+  
+  // K/D
+  const kd1 = row1.c[8]?.v ?? "--";
+  const kd2 = row2 ? (row2.c[8]?.v ?? "--") : null;
+  updateComparisons(kd1, kd2, "comp-player1-kd-cell", "comp-player2-kd-cell", kd1, kd2, true);
+  
+  // Win %
+  const winrate1 = row1.c[9]?.v ?? "--";
+  const winrate2 = row2 ? (row2.c[9]?.v ?? "--") : null;
+  updateComparisons(winrate1, winrate2, "comp-player1-winrate-cell", "comp-player2-winrate-cell", winrate1 + "%", (winrate2 || "--") + (winrate2 ? "%" : ""), true);
+  
+  document.getElementById("comparison-modal").classList.remove("hidden");
+}
+
+function removeFromComparison(nick) {
+  const index = comparisonPlayers.indexOf(nick);
+  if (index > -1) {
+    comparisonPlayers.splice(index, 1);
+  }
+  updateComparisonButton();
+  
+  // Jeśli został 1 gracz, zaktualizuj modal; jeśli 0, zamknij
+  if (comparisonPlayers.length === 1) {
+    openComparison();
+  } else if (comparisonPlayers.length === 0) {
+    closeComparison();
+  }
+}
+
+function closeComparison() {
+  document.getElementById("comparison-modal").classList.add("hidden");
+}
+
 
 function renderTable(table) {
   const thead = document.querySelector("#ranking thead");
@@ -237,20 +470,42 @@ if (searchInput) {
 
     displayed = 0;
     tbody.innerHTML = "";
-
     const btn = document.getElementById("load-more-btn");
     if (btn) btn.style.display = "block";
 
     loadMoreRows(20);
   };
 }
+
+// Przycisk wyczyść
+const clearBtn = document.getElementById('search-clear');
+if (clearBtn) {
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    clearBtn.classList.remove('visible');
+    
+    // Resetuj filtr - pokaż wszystkich graczy
+    filteredRows = allRows;
+    displayed = 0;
+    document.getElementById('ranking').querySelector('tbody').innerHTML = '';
+    const btn = document.getElementById('load-more-btn');
+    if (btn) btn.style.display = 'block';
+    loadMoreRows(20);
+    
+    searchInput.focus();
+  });
+}
+
 attachPlayerClickHandlers();
 
 function attachPlayerClickHandlers() {
-  document.querySelectorAll(".player-cell").forEach(el => {
+  document.querySelectorAll(".player-name").forEach(el => {
+    el.style.cursor = "pointer";
     el.addEventListener("click", e => {
-      const nick = el.dataset.nick;
-      const place = el.dataset.place;
+      e.stopPropagation();
+      const playerCell = el.closest(".player-cell");
+      const nick = playerCell.dataset.nick;
+      const place = playerCell.dataset.place;
 
       openPlayerModal(nick, place);
     });
@@ -261,8 +516,27 @@ function openPlayerModal(nick, currentPlace) {
   document.getElementById("modal-nick").textContent = nick;
   document.getElementById("modal-current-place").textContent = `#${currentPlace}`;
 
+  // placeholder zanim dane się załadują
+  document.getElementById("modal-best-place").textContent = "---";
+  document.getElementById("modal-matches").innerHTML = "<span style='opacity:0.6'>Ładowanie…</span>";
+
+  // fetch danych asynchronicznie
   loadLastMatches(nick);
   loadBestPlace(nick);
+  
+  // Ustaw przycisk porównania
+  const compareBtn = document.getElementById("compare-btn");
+  const isSelected = comparisonPlayers.includes(nick);
+  compareBtn.textContent = isSelected ? "Usuń z porównania" : "Dodaj do porównania";
+  compareBtn.style.background = isSelected ? "#e53935" : "#cbbd9a";
+  compareBtn.onclick = () => {
+    togglePlayerComparison(nick);
+    compareBtn.textContent = comparisonPlayers.includes(nick) ? "Usuń z porównania" : "Dodaj do porównania";
+    compareBtn.style.background = comparisonPlayers.includes(nick) ? "#e53935" : "#cbbd9a";
+    
+    // Jeśli jest 2+ graczy, pokaż przycisk porównania
+    updateComparisonButton();
+  };
 
   document.getElementById("player-modal").classList.remove("hidden");
 }
@@ -331,23 +605,63 @@ function loadBestPlace(nick) {
     .then(r => r.text())
     .then(t => {
       const json = JSON.parse(t.replace(/^[\s\S]*?\(/, "").replace(/\);\s*$/, ""));
-      const best = json.table.rows[0]?.c[0]?.v ?? "-";
-      document.getElementById("modal-best-place").textContent = `#${best}`;
+
+      const bestPlaceFromSnapshot = json.table.rows[0]?.c[0]?.v;
+
+      // aktualne miejsce z modala
+      const currentPlaceText =
+        document.getElementById("modal-current-place").textContent.replace("#", "");
+      const currentPlace = parseInt(currentPlaceText, 10);
+
+      let bestPlace;
+
+      if (typeof bestPlaceFromSnapshot === "number" && !isNaN(currentPlace)) {
+        bestPlace = Math.min(bestPlaceFromSnapshot, currentPlace);
+      } else if (!isNaN(currentPlace)) {
+        bestPlace = currentPlace;
+      } else {
+        bestPlace = "-";
+      }
+
+      document.getElementById("modal-best-place").textContent = `#${bestPlace}`;
     });
 }
 
 const modalOverlay = document.getElementById("player-modal");
 const modalContent = document.querySelector(".player-modal-content");
 
-// klik w tło → zamknij
-modalOverlay.addEventListener("click", () => {
+function closePlayerModal() {
   modalOverlay.classList.add("hidden");
-});
+}
+
+// klik w X
+document.getElementById("modal-close").onclick = closePlayerModal;
+
+// klik w tło
+modalOverlay.addEventListener("click", closePlayerModal);
 
 // klik w okienko → NIE zamykaj
-modalContent.addEventListener("click", e => {
-  e.stopPropagation();
+modalContent.addEventListener("click", e => e.stopPropagation());
+
+// ESC do zamknięcia modala porównania
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    const comparisonModal = document.getElementById("comparison-modal");
+    if (comparisonModal && !comparisonModal.classList.contains("hidden")) {
+      closeComparison();
+    }
+    // ESC dla player modala
+    closePlayerModal();
+  }
 });
 
-
+// Klik poza polem porównania - zamknij modal
+const comparisonModal = document.getElementById("comparison-modal");
+if (comparisonModal) {
+  comparisonModal.addEventListener("click", e => {
+    if (e.target === comparisonModal) {
+      closeComparison();
+    }
+  });
+}
 }
