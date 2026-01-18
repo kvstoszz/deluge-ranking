@@ -160,16 +160,21 @@ rowHtml += `<td>${rankDisplay}</td>`;
 const isContributor = contributors.includes(cell.v);
 
 rowHtml += `
-  <td>
+  <td class="player-cell"
+      data-nick="${cell.v}"
+      data-place="${row.rankPosition}">
     <div class="cell-content">
       <span class="rank ${rank.className}" style="color:${rank.color}">
         <img src="${rank.icon}" class="rank-icon" alt="${rank.name}">
         <span class="rank-name">${rank.name}</span>
       </span>
-      <span class="player-name${isContributor ? " contributor-glow" : ""}">${cell.v}</span>
+      <span class="player-name${isContributor ? " contributor-glow" : ""}">
+        ${cell.v}
+      </span>
     </div>
   </td>
 `;
+
           return;
         }
 
@@ -206,6 +211,7 @@ tbody.innerHTML += `<tr class="${rank.className} ${top5Class}">${rowHtml}</tr>`;
     });
 
     displayed += nextRows.length;
+	attachPlayerClickHandlers();
 
     const btn = document.getElementById("load-more-btn");
     if (btn && displayed >= filteredRows.length) {
@@ -238,5 +244,110 @@ if (searchInput) {
     loadMoreRows(20);
   };
 }
+attachPlayerClickHandlers();
+
+function attachPlayerClickHandlers() {
+  document.querySelectorAll(".player-cell").forEach(el => {
+    el.addEventListener("click", e => {
+      const nick = el.dataset.nick;
+      const place = el.dataset.place;
+
+      openPlayerModal(nick, place);
+    });
+  });
+}
+
+function openPlayerModal(nick, currentPlace) {
+  document.getElementById("modal-nick").textContent = nick;
+  document.getElementById("modal-current-place").textContent = `#${currentPlace}`;
+
+  loadLastMatches(nick);
+  loadBestPlace(nick);
+
+  document.getElementById("player-modal").classList.remove("hidden");
+}
+
+document.getElementById("modal-close").onclick = () => {
+  document.getElementById("player-modal").classList.add("hidden");
+};
+
+function loadLastMatches(displayName) {
+  const query = `
+    select A, L
+    where K = '${displayName}'
+  `;
+
+  const url =
+    `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?` +
+    `sheet=per_match_calc&tq=${encodeURIComponent(query)}&cachebuster=${Date.now()}`;
+
+  fetch(url)
+    .then(r => r.text())
+    .then(t => {
+      const json = JSON.parse(
+        t.replace(/^[\s\S]*?\(/, "").replace(/\);\s*$/, "")
+      );
+
+      const container = document.getElementById("modal-matches");
+      container.innerHTML = "";
+
+      if (!json.table.rows || json.table.rows.length === 0) {
+        container.innerHTML = "<span style='opacity:0.6'>Brak danych</span>";
+        return;
+      }
+
+      // 🔽 sortowanie po match_id (STRING DESC)
+      const sorted = json.table.rows.sort((a, b) => {
+        const aId = a.c[0]?.v ?? "";
+        const bId = b.c[0]?.v ?? "";
+        return bId.localeCompare(aId);
+      });
+
+      // 🔽 tylko 5 ostatnich
+      sorted.slice(0, 5).forEach(r => {
+        const result = r.c[1]?.v;
+
+        container.innerHTML += `
+          <span class="match-result ${result === "W" ? "win" : "loss"}">
+            ${result}
+          </span>
+        `;
+      });
+    });
+}
+
+
+
+
+function loadBestPlace(nick) {
+  const query = `
+    select min(D)
+    where B = '${nick}'
+  `;
+
+  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?sheet=ranking_snapshot&tq=${encodeURIComponent(query)}`;
+
+  fetch(url)
+    .then(r => r.text())
+    .then(t => {
+      const json = JSON.parse(t.replace(/^[\s\S]*?\(/, "").replace(/\);\s*$/, ""));
+      const best = json.table.rows[0]?.c[0]?.v ?? "-";
+      document.getElementById("modal-best-place").textContent = `#${best}`;
+    });
+}
+
+const modalOverlay = document.getElementById("player-modal");
+const modalContent = document.querySelector(".player-modal-content");
+
+// klik w tło → zamknij
+modalOverlay.addEventListener("click", () => {
+  modalOverlay.classList.add("hidden");
+});
+
+// klik w okienko → NIE zamykaj
+modalContent.addEventListener("click", e => {
+  e.stopPropagation();
+});
+
 
 }
