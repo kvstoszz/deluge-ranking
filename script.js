@@ -7,9 +7,230 @@ let comparisonPlayers = [];
 const MAX_COMPARISON_PLAYERS = 2;
 const contributors = [
   "Snykas",
-  "Kimono"
+  "Kimono",
+  "Zares"
 ];
 
+// Języki i tłumaczenia
+let currentLanguage = localStorage.getItem('deluge-language') || 'pl';
+let sortColumn = 0; // 0 = domyślnie bez sortowania (ranking)
+let sortDirection = 'asc';
+
+const translations = {
+  pl: {
+    searchPlaceholder: "Szukaj gracza...",
+    players: "Gracze",
+    season: "Aktualny sezon",
+    leader: "Lider",
+    loadMore: "Pokaż więcej",
+    preseason: "Preseason",
+    compare: "Dodaj do porównania",
+    removeCompare: "Usuń z porównania",
+    currentPlace: "Obecne miejsce",
+    bestPlace: "Najwyższe miejsce w sezonie",
+    lastMatches: "Ostatnie 5 meczy",
+    noData: "Brak danych",
+    loading: "Ładowanie…",
+    notFound: "Nie znaleziono gracza",
+    titleMain: "The Deluge Matchmaking",
+    titleSub: "Community ranking & player stats",
+    playerRole: "Gracz",
+    colRating: "Rating",
+    colKills: "Zabójstwa",
+    colDeaths: "Śmierci",
+    colTeamkills: "Teamkille",
+    colWins: "Wygrane",
+    colLosses: "Przegrane",
+    colMatches: "Mecze",
+    colKD: "KD",
+    colWinrate: "Win %"
+  },
+  en: {
+    searchPlaceholder: "Search player...",
+    players: "Players",
+    season: "Current season",
+    leader: "Leader",
+    loadMore: "Show more",
+    preseason: "Preseason",
+    compare: "Add to comparison",
+    removeCompare: "Remove from comparison",
+    currentPlace: "Current place",
+    bestPlace: "Best place this season",
+    lastMatches: "Last 5 matches",
+    noData: "No data",
+    loading: "Loading…",
+    notFound: "Player not found",
+    titleMain: "The Deluge Matchmaking",
+    titleSub: "Community ranking & player stats",
+    playerRole: "Player",
+    colRating: "Rating",
+    colKills: "Kills",
+    colDeaths: "Deaths",
+    colTeamkills: "Teamkills",
+    colWins: "Wins",
+    colLosses: "Losses",
+    colMatches: "Matches",
+    colKD: "KD",
+    colWinrate: "Win %"
+  },
+  sl: {
+    searchPlaceholder: "Szukej szpilera...",
+    players: "Szpilery",
+    season: "Aktualny syzōn",
+    leader: "Szpicnlajter",
+    loadMore: "Pokŏż wiyncyj",
+    preseason: "Preseason",
+    compare: "Dej do przirōwnanie",
+    removeCompare: "Wycŏfej  z przirōwnaniŏ",
+    currentPlace: "Aktualny plac",
+    bestPlace: "Nojlepsze plac w tym syzōnie",
+    lastMatches: "Ôstatnie 5 meczy",
+    noData: "Ni ma danych",
+    loading: "Laduje…",
+    notFound: "Niy ma szpilera",
+    titleMain: "The Deluge Matchmaking",
+    titleSub: "Community ranking & player stats",
+    playerRole: "Szpiler",
+    colRating: "Rating",
+    colKills: "Zabōjstwa",
+    colDeaths: "Śmiyrci",
+    colTeamkills: "Teamkille",
+    colWins: "Wygrany",
+    colLosses: "Niderlagi",
+    colMatches: "Mecze",
+    colKD: "KD",
+    colWinrate: "Win %"
+  }
+};
+
+function t(key) {
+  return translations[currentLanguage]?.[key] || translations['pl'][key];
+}
+
+function setLanguage(lang) {
+  currentLanguage = lang;
+  localStorage.setItem('deluge-language', lang);
+  updateLanguageUI();
+  applyTranslations();
+}
+
+function updateLanguageUI() {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.lang === currentLanguage) {
+      btn.classList.add('active');
+    }
+  });
+}
+
+function applyTranslations() {
+  // Aktualizuj tytuły
+  document.getElementById('title-main').textContent = t('titleMain');
+  document.getElementById('title-sub').textContent = t('titleSub');
+  
+  // Aktualizuj placeholder wyszukiwarki
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.placeholder = t('searchPlaceholder');
+  }
+  
+  // Aktualizuj etykiety
+  const labelPlayers = document.getElementById('label-players');
+  if (labelPlayers) labelPlayers.textContent = t('players');
+  
+  const labelSeason = document.getElementById('label-season');
+  if (labelSeason) labelSeason.textContent = t('season');
+  
+  const labelLeader = document.getElementById('label-leader');
+  if (labelLeader) labelLeader.textContent = t('leader');
+  
+  const seasonValue = document.getElementById('season-value');
+  if (seasonValue) seasonValue.textContent = t('preseason');
+  
+  // Aktualizuj przyciski
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  if (loadMoreBtn) {
+    loadMoreBtn.textContent = t('loadMore');
+  }
+  
+  const compareBtn = document.getElementById('compare-btn');
+  if (compareBtn) {
+    const nick = document.getElementById('modal-nick')?.textContent;
+    if (nick && comparisonPlayers.includes(nick)) {
+      compareBtn.textContent = t('removeCompare');
+    } else {
+      compareBtn.textContent = t('compare');
+    }
+  }
+  
+  // Aktualizuj modal statystyk gracza
+  const modalRole = document.querySelector('.modal-role');
+  if (modalRole) modalRole.textContent = t('playerRole');
+  
+  const modalLabels = document.querySelectorAll('.modal-stat-label');
+  if (modalLabels[0]) modalLabels[0].textContent = t('currentPlace');
+  if (modalLabels[1]) modalLabels[1].textContent = t('bestPlace');
+  
+  // Aktualizuj sekcję ostatnich meczy
+  const sectionTitle = document.querySelector('.modal-section-title');
+  if (sectionTitle) sectionTitle.textContent = t('lastMatches');
+  
+  // Aktualizuj komunikaty
+  const getColLabel = (label) => {
+    const labelMap = {
+      'Rating': 'colRating',
+      'Zabójstwa': 'colKills',
+      'Śmierci': 'colDeaths',
+      'Teamkille': 'colTeamkills',
+      'Wygrane': 'colWins',
+      'Przegrane': 'colLosses',
+      'Mecze': 'colMatches',
+      'KD': 'colKD',
+      'Win %': 'colWinrate'
+    };
+    const translationKey = labelMap[label];
+    if (translationKey) {
+      return t(translationKey);
+    }
+    // Przywrót: zwróć etykietę bez zmian
+    return label || '';
+  };
+  
+  // Aktualizuj nagłówek kolumny Nick
+  const nickHeader = document.querySelector('th[data-sort-col="1"]');
+  if (nickHeader) {
+    const translated = t('playerRole');
+    const sortClass = nickHeader.className.includes('sort-asc') ? 'sort-asc' : (nickHeader.className.includes('sort-desc') ? 'sort-desc' : '');
+    nickHeader.innerHTML = translated + '<span class="sort-indicator"></span>';
+    nickHeader.className = 'sortable-header ' + sortClass;
+  }
+  
+  // Aktualizuj nagłówki kolumn z tłumaczeniami
+  document.querySelectorAll('th[data-sort-col]').forEach(th => {
+    const colName = th.getAttribute('data-col-name');
+    if (colName) {
+      const translatedLabel = getColLabel(colName);
+      const sortClass = th.className.includes('sort-asc') ? 'sort-asc' : (th.className.includes('sort-desc') ? 'sort-desc' : '');
+      th.innerHTML = translatedLabel + '<span class="sort-indicator"></span>';
+      th.className = 'sortable-header ' + sortClass;
+    }
+  });
+}
+
+// Inicjalizacja języka przy załadowaniu strony
+window.addEventListener('load', () => {
+  updateLanguageUI();
+  applyTranslations();
+});
+
+// Dodaj nasłuchiwanie przycisków językowych
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setLanguage(btn.dataset.lang);
+    });
+  });
+});
 
 const query = `
   select *
@@ -325,15 +546,46 @@ function renderTable(table) {
   const thead = document.querySelector("#ranking thead");
   const tbody = document.querySelector("#ranking tbody");
 
-thead.innerHTML = `
-  <tr>
-    <th>#</th>
-    ${table.cols.map(c => `<th>${c.label}</th>`).join("")}
-  </tr>
-`;
+  const getColLabel = (label) => {
+    const labelMap = {
+      'Rating': 'colRating',
+      'Zabójstwa': 'colKills',
+      'Śmierci': 'colDeaths',
+      'Teamkille': 'colTeamkills',
+      'Wygrane': 'colWins',
+      'Przegrane': 'colLosses',
+      'Mecze': 'colMatches',
+      'KD': 'colKD',
+      'Win %': 'colWinrate'
+    };
+    const translationKey = labelMap[label];
+    if (translationKey) {
+      return t(translationKey);
+    }
+    // Powrót: zwróć etykietę bez zmian
+    return label || '';
+  };
+
+  const headerCells = table.cols.map((c, idx) => {
+    // Nick jest w kolumnie 0, colIndex = 1
+    if (idx === 0) {
+      return `<th data-sort-col="1">${t('playerRole')}<span class="sort-indicator"></span></th>`;
+    }
+    const colIndex = idx + 1;
+    const label = getColLabel(c.label);
+    return `<th data-sort-col="${colIndex}" data-col-name="${c.label}">${label}<span class="sort-indicator"></span></th>`;
+  }).join("");
+
+  thead.innerHTML = `
+    <tr>
+      <th>#</th>
+      ${headerCells}
+    </tr>
+  `;
 
   const winrateColIndex = table.cols.findIndex(c => c.label === "Win %");
   const kdColIndex = table.cols.findIndex(c => c.label === "KD");
+  const nickColIndex = 0; // Nick jest zawsze w kolumnie 0
 
 allRows = table.rows.filter(row => {
   const nickCell = row.c[0];
@@ -496,6 +748,90 @@ if (clearBtn) {
   });
 }
 
+// Sortowanie kolumn
+document.querySelectorAll('th[data-sort-col]').forEach(header => {
+  header.addEventListener('click', () => {
+    // data-sort-col zaczyna się od 1
+    // ale sortColumn jest indeksowany od 0
+    const colIndex = parseInt(header.dataset.sortCol);
+    
+    // trójstanowe sortowanie: dla Nick (colIndex=1) asc→desc→none, dla reszty desc→asc→none
+    let newState = (colIndex === 1) ? 'asc' : 'desc';
+    let isUnsorted = false;
+    
+    if (sortColumn === colIndex) {
+      if (colIndex === 1) {
+        // Nick: asc → desc → none
+        if (header.classList.contains('sort-asc')) {
+          newState = 'desc';
+        } else if (header.classList.contains('sort-desc')) {
+          newState = 'none';
+          isUnsorted = true;
+        }
+      } else {
+        // Reszta: desc → asc → none
+        if (header.classList.contains('sort-desc')) {
+          newState = 'asc';
+        } else if (header.classList.contains('sort-asc')) {
+          newState = 'none';
+          isUnsorted = true;
+        }
+      }
+    }
+    
+    // aktywuj odpowiednią klasę sortowania
+    document.querySelectorAll('th[data-sort-col]').forEach(th => {
+      th.classList.remove('sort-asc', 'sort-desc');
+    });
+    
+    if (!isUnsorted) {
+      header.classList.add(`sort-${newState}`);
+      sortColumn = colIndex;
+      sortDirection = newState;
+    } else {
+      // reset sortowania
+      sortColumn = 0;
+      sortDirection = 'asc';
+    }
+    
+    // sortuj filteredRows według wybranej kolumny
+    if (!isUnsorted) {
+      filteredRows.sort((a, b) => {
+        const cellA = a.c[colIndex - 1];
+        const cellB = b.c[colIndex - 1];
+        
+        const valA = cellA?.v ?? '';
+        const valB = cellB?.v ?? '';
+        
+        // Porównanie liczbowe, jeśli oba są liczbami
+        const numA = parseFloat(valA);
+        const numB = parseFloat(valB);
+        
+        let result = 0;
+        if (!isNaN(numA) && !isNaN(numB)) {
+          result = numA - numB;
+        } else {
+          // Porównanie tekstowe (polskie sortowanie)
+          result = String(valA).localeCompare(String(valB), 'pl');
+        }
+        
+        return sortDirection === 'asc' ? result : -result;
+      });
+    } else {
+      // reset do oryginalnego rankingu
+      filteredRows.sort((a, b) => a.rankPosition - b.rankPosition);
+    }
+    
+    // przeładuj widoczne wiersze
+    const tbody = document.querySelector("#ranking tbody");
+    displayed = 0;
+    tbody.innerHTML = '';
+    const btn = document.getElementById('load-more-btn');
+    if (btn) btn.style.display = 'block';
+    loadMoreRows(20);
+  });
+});
+
 attachPlayerClickHandlers();
 
 function attachPlayerClickHandlers() {
@@ -518,7 +854,7 @@ function openPlayerModal(nick, currentPlace) {
 
   // placeholder zanim dane się załadują
   document.getElementById("modal-best-place").textContent = "---";
-  document.getElementById("modal-matches").innerHTML = "<span style='opacity:0.6'>Ładowanie…</span>";
+  document.getElementById("modal-matches").innerHTML = `<span style='opacity:0.6'>${t('loading')}</span>`;
 
   // fetch danych asynchronicznie
   loadLastMatches(nick);
@@ -527,11 +863,11 @@ function openPlayerModal(nick, currentPlace) {
   // Ustaw przycisk porównania
   const compareBtn = document.getElementById("compare-btn");
   const isSelected = comparisonPlayers.includes(nick);
-  compareBtn.textContent = isSelected ? "Usuń z porównania" : "Dodaj do porównania";
+  compareBtn.textContent = isSelected ? t('removeCompare') : t('compare');
   compareBtn.style.background = isSelected ? "#e53935" : "#cbbd9a";
   compareBtn.onclick = () => {
     togglePlayerComparison(nick);
-    compareBtn.textContent = comparisonPlayers.includes(nick) ? "Usuń z porównania" : "Dodaj do porównania";
+    compareBtn.textContent = comparisonPlayers.includes(nick) ? t('removeCompare') : t('compare');
     compareBtn.style.background = comparisonPlayers.includes(nick) ? "#e53935" : "#cbbd9a";
     
     // Jeśli jest 2+ graczy, pokaż przycisk porównania
@@ -566,7 +902,7 @@ function loadLastMatches(displayName) {
       container.innerHTML = "";
 
       if (!json.table.rows || json.table.rows.length === 0) {
-        container.innerHTML = "<span style='opacity:0.6'>Brak danych</span>";
+        container.innerHTML = `<span style='opacity:0.6'>${translations[currentLanguage]['noData']}</span>`;
         return;
       }
 
