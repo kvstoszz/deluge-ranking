@@ -35,9 +35,9 @@ body {
   cursor: url('cursor.png'), auto;
 }
 
-/* jeśli można zaznaczać tekst pokazuje standardową kreskę */
-p, span, h1, h2, h3, h4, h5, h6, a, td, th, label, input {
-  cursor: text;
+/* jeśli można zaznaczać tekst pokazuje customowy kursor */
+p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
+  cursor: url('cursortext.png') 0 0, text;
 }
 
 /* cała strona */
@@ -56,6 +56,7 @@ p, span, h1, h2, h3, h4, h5, h6, a, td, th, label, input {
   margin-top: 25px;
   margin-bottom: 20px;
   padding: 5px 0;
+  position: relative;
 }
 
 .header h1 {
@@ -108,7 +109,7 @@ p, span, h1, h2, h3, h4, h5, h6, a, td, th, label, input {
   background: none;
   border: none;
   color: #aaa;
-  cursor: pointer;
+  cursor: url('cursorclick.png'), pointer;
   font-size: 18px;
   opacity: 0;
   transition: all 0.2s ease;
@@ -290,6 +291,10 @@ tr {
   transition: all 0.15s ease;
 }
 
+tr td:not(:has(.player-name)) {
+  cursor: url('cursor.png'), auto;
+}
+
 tr:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.52);
 }
@@ -310,6 +315,11 @@ tr:hover td {
 
 tr:hover .player-name {
   color: #e8dcc8;
+  transition: all 0.2s ease;
+}
+
+tr:hover .player-name {
+  transform: scale(1.04);
 }
 
 .cell-content {
@@ -344,6 +354,11 @@ tr:hover .rank-icon {
   font-weight: 700;
   letter-spacing: 0.3px;
   color: #d4c5a0;
+  transition: all 0.2s ease;
+}
+
+tr:hover .rank-name {
+  transform: scale(1.06);
 }
 
 .player-name {
@@ -351,6 +366,7 @@ tr:hover .rank-icon {
   font-weight: 600;
   color: #e8dcc8;
   transition: all 0.2s ease;
+  cursor: url('cursorclick.png'), pointer !important;
 }
 
 tr:hover .player-name {
@@ -394,7 +410,7 @@ tr:hover .player-name {
   display: block;
   width: 320px;             /* rozmiar ikonki */
   height: 80px;
-  cursor: pointer;
+  cursor: url('cursorclick.png'), pointer;
 }
 
 .discord-wrapper a .discord-icon {
@@ -422,7 +438,7 @@ tr:hover .player-name {
   border: 2px solid #cbbd9a;
   background: linear-gradient(135deg, rgba(203, 189, 154, 0.1), rgba(203, 189, 154, 0.05));
   color: #cbbd9a;
-  cursor: pointer;
+  cursor: url('cursorclick.png'), pointer;
   transition: all 0.3s ease;
   letter-spacing: 0.5px;
 }
@@ -614,7 +630,7 @@ tr.top-10:hover td {
   position: absolute;
   top: 12px;
   right: 14px;
-  cursor: pointer;
+  cursor: url('cursorclick.png'), pointer;
   font-size: 20px;
   opacity: 0.6;
 }
@@ -624,7 +640,7 @@ tr.top-10:hover td {
 }
 
 .player-name {
-  cursor: pointer;
+  cursor: url('cursorclick.png'), pointer !important;
 }
 
 .match-result {
@@ -641,6 +657,74 @@ tr.top-10:hover td {
   color: #ff4a4a;
 }
 
+/* Language selector */
+.language-selector {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(203, 189, 154, 0.3);
+}
+
+.lang-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(203, 189, 154, 0.4);
+  border-radius: 4px;
+  background: transparent;
+  color: #999;
+  cursor: url('cursorclick.png'), pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lang-btn:hover {
+  color: #cbbd9a;
+  border-color: #cbbd9a;
+}
+
+.lang-btn.active {
+  background: #cbbd9a;
+  color: #000;
+  border-color: #cbbd9a;
+  font-weight: 700;
+}
+
+/* Sort indicator */
+.sort-indicator {
+  display: inline;
+  margin-left: 6px;
+  font-size: 12px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  color: #cbbd9a;
+  font-weight: bold;
+}
+
+th[data-sort-col] {
+  user-select: none;
+  cursor: url('cursorclick.png'), pointer;
+}
+
+th[data-sort-col]:hover .sort-indicator {
+  opacity: 0.6;
+}
+
+th[data-sort-col].sort-asc .sort-indicator::after {
+  content: "▲";
+  opacity: 1;
+}
+
+th[data-sort-col].sort-desc .sort-indicator::after {
+  content: "▼";
+  opacity: 1;
+}
 
   </style>
 </head>
@@ -654,8 +738,14 @@ tr.top-10:hover td {
   <img src="logo2.png" alt="Deluge logo" class="logo">
 
   <div class="title">
-    <h1>The Deluge Matchmaking</h1>
-    <div class="subtitle">Community ranking & player stats</div>
+    <h1 id="title-main">The Deluge Matchmaking</h1>
+    <div class="subtitle" id="title-sub">Community ranking & player stats</div>
+  </div>
+
+  <div class="language-selector">
+    <button class="lang-btn active" data-lang="pl">PL</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="sl">ŚL</button>
   </div>
 </header>
 
@@ -671,17 +761,17 @@ tr.top-10:hover td {
 <div class="info-panel">
   <div class="info-box">
     <div class="info-value" id="player-count">--</div>
-    <div class="info-label">Gracze</div>
+    <div class="info-label" id="label-players">Gracze</div>
   </div>
 
   <div class="info-box">
-    <div class="info-value">Preseason</div>
-    <div class="info-label">Aktualny sezon</div>
+    <div class="info-value" id="season-value">Preseason</div>
+    <div class="info-label" id="label-season">Aktualny sezon</div>
   </div>
 
   <div class="info-box">
     <div class="info-value" id="leader">---</div>
-    <div class="info-label">Lider</div>
+    <div class="info-label" id="label-leader">Lider</div>
   </div>
 </div>
 
