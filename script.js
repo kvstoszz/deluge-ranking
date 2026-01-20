@@ -126,7 +126,7 @@ const translations = {
     colKills: "Zabōjstwa",
     colDeaths: "Śmiyrci",
     colTeamkills: "Teamkille",
-    colWins: "Wygrany",
+    colWins: "Wygrane",
     colLosses: "Niderlagi",
     colMatches: "Mecze",
     colKD: "KD",
@@ -1155,3 +1155,4 @@ if (comparisonModal) {
   });
 }
 }
+
