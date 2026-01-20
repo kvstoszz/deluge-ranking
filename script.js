@@ -357,7 +357,7 @@ function getRank(elo) {
   if (elo < 3001) {
     return { name: "Hetman", color: "#731f00", icon: "ranks/hetman.png", className: "rank-hetman" };
   }
-  return { name: "Imperator", color: "#ffd700", icon: "ranks/czern.png", className: "rank-imperator" };
+  return { name: "Imperator", color: "#ffd700", icon: "ranks/imperator.png", className: "rank-imperator" };
 }
 
 function getColorByValue(value) {
@@ -1155,4 +1155,5 @@ if (comparisonModal) {
   });
 }
 }
+
 
