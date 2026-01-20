@@ -107,8 +107,8 @@ const translations = {
     season: "Aktualny syzōn",
     leader: "Szpicnlajter",
     loadMore: "Pokŏż wiyncyj",
-    showLess: "Pokŏż mnyj",
-    preseason: "Preseason",
+    showLess: "Pokŏż mynij",
+    preseason: "Przedsyzōn",
     addToComparison: "Dej do przirōwnaniŏ",
     removeFromComparison: "Wycŏfej  z przirōwnaniŏ",
     compare: "Przirōwnej",
@@ -119,18 +119,18 @@ const translations = {
     noData: "Ni ma danych",
     loading: "Laduje…",
     notFound: "Niy ma szpilera",
-    titleMain: "The Deluge Matchmaking",
-    titleSub: "Community ranking & player stats",
+    titleMain: "Srogi Zalōnie Matchmaking",
+    titleSub: "Społycznoś hierarchijŏ i statystyki szpilery",
     playerRole: "Szpiler",
-    colRating: "Rating",
+    colRating: "ôcyna",
     colKills: "Zabōjstwa",
-    colDeaths: "Śmiyrci",
-    colTeamkills: "Teamkille",
+    colDeaths: "Śmierći",
+    colTeamkills: "Zabōjstwa zwōlynników",
     colWins: "Wygrane",
     colLosses: "Niderlagi",
     colMatches: "Mecze",
     colKD: "KD",
-    colWinrate: "Win %"
+    colWinrate: "Zwyciyjnstwo %"
   }
 };
 
@@ -1155,5 +1155,6 @@ if (comparisonModal) {
   });
 }
 }
+
 
 
