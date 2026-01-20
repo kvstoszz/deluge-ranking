@@ -11,6 +11,28 @@ const contributors = [
   "Zares"
 ];
 
+// Dźwięki
+function playSound(soundFile) {
+  const audio = new Audio(soundFile);
+  audio.volume = 0.5;
+  audio.play().catch(err => console.log("Audio play failed:", err));
+}
+
+document.addEventListener('click', function(e) {
+  // Dokładnie sprawdź element pod kursorem: użyj elementFromPoint
+  const x = e.clientX;
+  const y = e.clientY;
+  if (typeof x !== 'number' || typeof y !== 'number') return;
+
+  const el = document.elementFromPoint(x, y);
+  if (!el) return;
+
+  const clickedEaster = el.closest && el.closest('.easter-k');
+  if (clickedEaster) {
+    playSound('secondclick.mp3');
+  }
+}, true);
+
 // Języki i tłumaczenia
 let currentLanguage = localStorage.getItem('deluge-language') || 'pl';
 let sortColumn = 0; // 0 = domyślnie bez sortowania (ranking)
@@ -23,8 +45,11 @@ const translations = {
     season: "Aktualny sezon",
     leader: "Lider",
     loadMore: "Pokaż więcej",
+    showLess: "Pokaż mniej",
     preseason: "Preseason",
-    compare: "Dodaj do porównania",
+    addToComparison: "Dodaj do porównania",
+    removeFromComparison: "Usuń z porównania",
+    compare: "Porównaj",
     removeCompare: "Usuń z porównania",
     currentPlace: "Obecne miejsce",
     bestPlace: "Najwyższe miejsce w sezonie",
@@ -51,8 +76,11 @@ const translations = {
     season: "Current season",
     leader: "Leader",
     loadMore: "Show more",
+    showLess: "Show less",
     preseason: "Preseason",
-    compare: "Add to comparison",
+    addToComparison: "Add to comparison",
+    removeFromComparison: "Remove from comparison",
+    compare: "Compare",
     removeCompare: "Remove from comparison",
     currentPlace: "Current place",
     bestPlace: "Best place this season",
@@ -79,8 +107,11 @@ const translations = {
     season: "Aktualny syzōn",
     leader: "Szpicnlajter",
     loadMore: "Pokŏż wiyncyj",
+    showLess: "Pokŏż mnyj",
     preseason: "Preseason",
-    compare: "Dej do przirōwnanie",
+    addToComparison: "Dej do przirōwnaniŏ",
+    removeFromComparison: "Wycŏfej  z przirōwnaniŏ",
+    compare: "Przirōwnej",
     removeCompare: "Wycŏfej  z przirōwnaniŏ",
     currentPlace: "Aktualny plac",
     bestPlace: "Nojlepsze plac w tym syzōnie",
@@ -124,9 +155,12 @@ function updateLanguageUI() {
 }
 
 function applyTranslations() {
-  // Aktualizuj tytuły
-  document.getElementById('title-main').textContent = t('titleMain');
-  document.getElementById('title-sub').textContent = t('titleSub');
+  const titleElement = document.getElementById('title-main');
+  if (titleElement) {
+    if (!titleElement.querySelector('.easter-k')) {
+      titleElement.innerHTML = 'The Deluge Matc<span class="easter-k">k</span>making';
+    }
+  }
   
   // Aktualizuj placeholder wyszukiwarki
   const searchInput = document.getElementById('search-input');
@@ -152,14 +186,16 @@ function applyTranslations() {
   if (loadMoreBtn) {
     loadMoreBtn.textContent = t('loadMore');
   }
+  const showLessBtn = document.getElementById('show-less-btn');
+  if (showLessBtn) showLessBtn.textContent = t('showLess');
   
   const compareBtn = document.getElementById('compare-btn');
   if (compareBtn) {
     const nick = document.getElementById('modal-nick')?.textContent;
     if (nick && comparisonPlayers.includes(nick)) {
-      compareBtn.textContent = t('removeCompare');
+      compareBtn.textContent = t('removeFromComparison');
     } else {
-      compareBtn.textContent = t('compare');
+      compareBtn.textContent = t('addToComparison');
     }
   }
   
@@ -215,6 +251,32 @@ function applyTranslations() {
       th.className = 'sortable-header ' + sortClass;
     }
   });
+  
+  // Aktualizuj przycisk porównania
+  const comparisonBtn = document.getElementById('comparison-btn');
+  if (comparisonBtn && comparisonPlayers.length > 0) {
+    comparisonBtn.textContent = `${t('compare')} (${comparisonPlayers.length}/${MAX_COMPARISON_PLAYERS})`;
+  }
+  
+  // Aktualizuj przycisk "Dodaj do porównania" w modalu gracza jeśli jest otwarty
+  const playerModal = document.getElementById('player-modal');
+  if (playerModal && !playerModal.classList.contains('hidden')) {
+    const compareBtn = document.getElementById('compare-btn');
+    if (compareBtn) {
+      const nick = document.getElementById('modal-nick')?.textContent;
+      if (nick && comparisonPlayers.includes(nick)) {
+        compareBtn.textContent = t('removeFromComparison');
+      } else {
+        compareBtn.textContent = t('addToComparison');
+      }
+    }
+  }
+  
+  // Aktualizuj etykiety w modalu porównania jeśli jest otwarty
+  const comparisonModal = document.getElementById('comparison-modal');
+  if (comparisonModal && !comparisonModal.classList.contains('hidden')) {
+    updateComparisonModalLabels();
+  }
 }
 
 // Inicjalizacja języka przy załadowaniu strony
@@ -227,6 +289,7 @@ window.addEventListener('load', () => {
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      playSound('press.mp3');
       setLanguage(btn.dataset.lang);
     });
   });
@@ -350,7 +413,7 @@ function updateComparisonButton() {
   const comparisonBtn = document.getElementById("comparison-btn");
   if (comparisonBtn) {
     if (comparisonPlayers.length > 0) {
-      comparisonBtn.textContent = `Porównaj (${comparisonPlayers.length}/${MAX_COMPARISON_PLAYERS})`;
+      comparisonBtn.textContent = `${t('compare')} (${comparisonPlayers.length}/${MAX_COMPARISON_PLAYERS})`;
       comparisonBtn.style.display = "block";
       if (comparisonPlayers.length >= 1) {
         comparisonBtn.style.opacity = "1";
@@ -363,6 +426,16 @@ function updateComparisonButton() {
       comparisonBtn.style.display = "none";
     }
   }
+}
+
+function updateComparisonModalLabels() {
+  // Aktualizuj etykiety poprzez data-label-key atribute
+  document.querySelectorAll('#comparison-modal [data-label-key]').forEach(labelDiv => {
+    const translationKey = labelDiv.getAttribute('data-label-key');
+    if (translationKey) {
+      labelDiv.textContent = t(translationKey);
+    }
+  });
 }
 
 function openComparison() {
@@ -520,6 +593,9 @@ function openComparison() {
   updateComparisons(winrate1, winrate2, "comp-player1-winrate-cell", "comp-player2-winrate-cell", winrate1 + "%", (winrate2 || "--") + (winrate2 ? "%" : ""), true);
   
   document.getElementById("comparison-modal").classList.remove("hidden");
+  
+  // Aktualizuj tłumaczenia etykiet w modalu
+  updateComparisonModalLabels();
 }
 
 function removeFromComparison(nick) {
@@ -610,6 +686,22 @@ if (pc) pc.textContent = allRows.length;
   displayed = 0;
   tbody.innerHTML = "";
 
+  // track initial displayed count and increments stack for Show less
+  let initialDisplayed = null;
+  const incrementsStack = [];
+
+  // helper to update Show less button visibility and text
+  const showLessBtn = document.getElementById('show-less-btn');
+  function updateShowLessUI() {
+    if (!showLessBtn) return;
+    if (incrementsStack.length > 0) {
+      showLessBtn.style.display = 'inline-block';
+      showLessBtn.textContent = t('showLess');
+    } else {
+      showLessBtn.style.display = 'none';
+    }
+  }
+
   loadMoreRows(20);
 
   function loadMoreRows(count) {
@@ -696,22 +788,70 @@ tbody.innerHTML += `<tr class="${rank.className} ${top5Class}">${rowHtml}</tr>`;
     });
 
     displayed += nextRows.length;
-	attachPlayerClickHandlers();
+    // after first load, set initialDisplayed; subsequent loads push increments
+    if (initialDisplayed === null) {
+      initialDisplayed = displayed;
+    } else {
+      incrementsStack.push(nextRows.length);
+    }
+
+    attachPlayerClickHandlers();
 
     const btn = document.getElementById("load-more-btn");
     if (btn && displayed >= filteredRows.length) {
       btn.style.display = "none";
     }
+
+    updateShowLessUI();
   }
 
   const btn = document.getElementById("load-more-btn");
   if (btn) {
-    btn.onclick = () => loadMoreRows(10);
+    btn.onclick = () => {
+      playSound('showmore.mp3');
+      loadMoreRows(10);
+    };
+  }
+
+  // Show less button behaviour
+  const showLessBtnEl = document.getElementById('show-less-btn');
+  if (showLessBtnEl) {
+    showLessBtnEl.onclick = () => {
+      playSound('press.mp3');
+      // pop last increment
+      const last = incrementsStack.pop();
+      if (!last) return updateShowLessUI();
+
+      // determine how many rows we should actually remove (don't go below initialDisplayed)
+      const removable = Math.max(0, displayed - (initialDisplayed || 0));
+      const removeCount = Math.min(last, removable);
+      if (removeCount <= 0) return updateShowLessUI();
+
+      // take a snapshot of current rows and pick the last `removeCount`
+      const currentRows = Array.from(tbody.children);
+      const rowsToRemove = currentRows.slice(-removeCount);
+
+      // animate removal
+      rowsToRemove.forEach(r => r.classList.add('row-remove'));
+
+      // after animation, remove nodes and update counters
+      setTimeout(() => {
+        rowsToRemove.forEach(r => { if (r && r.parentNode) r.parentNode.removeChild(r); });
+        displayed = Math.max(initialDisplayed || 0, displayed - removeCount);
+        const lmBtn = document.getElementById('load-more-btn');
+        if (lmBtn) lmBtn.style.display = 'inline-block';
+        updateShowLessUI();
+      }, 300);
+    };
   }
   
 const searchInput = document.getElementById("search-input");
 
 if (searchInput) {
+  searchInput.addEventListener('focus', () => {
+    playSound('presstext.mp3');
+  });
+  
   searchInput.oninput = () => {
     const query = searchInput.value.toLowerCase();
 
@@ -722,6 +862,10 @@ if (searchInput) {
 
     displayed = 0;
     tbody.innerHTML = "";
+    // reset expansion tracking
+    initialDisplayed = null;
+    incrementsStack.length = 0;
+    updateShowLessUI();
     const btn = document.getElementById("load-more-btn");
     if (btn) btn.style.display = "block";
 
@@ -740,6 +884,10 @@ if (clearBtn) {
     filteredRows = allRows;
     displayed = 0;
     document.getElementById('ranking').querySelector('tbody').innerHTML = '';
+    // reset expansion tracking
+    initialDisplayed = null;
+    incrementsStack.length = 0;
+    updateShowLessUI();
     const btn = document.getElementById('load-more-btn');
     if (btn) btn.style.display = 'block';
     loadMoreRows(20);
@@ -826,6 +974,10 @@ document.querySelectorAll('th[data-sort-col]').forEach(header => {
     const tbody = document.querySelector("#ranking tbody");
     displayed = 0;
     tbody.innerHTML = '';
+    // reset expansion tracking when sorting/reseting
+    initialDisplayed = null;
+    incrementsStack.length = 0;
+    updateShowLessUI();
     const btn = document.getElementById('load-more-btn');
     if (btn) btn.style.display = 'block';
     loadMoreRows(20);
@@ -839,6 +991,7 @@ function attachPlayerClickHandlers() {
     el.style.cursor = "pointer";
     el.addEventListener("click", e => {
       e.stopPropagation();
+      playSound('press.mp3');
       const playerCell = el.closest(".player-cell");
       const nick = playerCell.dataset.nick;
       const place = playerCell.dataset.place;
@@ -863,11 +1016,12 @@ function openPlayerModal(nick, currentPlace) {
   // Ustaw przycisk porównania
   const compareBtn = document.getElementById("compare-btn");
   const isSelected = comparisonPlayers.includes(nick);
-  compareBtn.textContent = isSelected ? t('removeCompare') : t('compare');
+  compareBtn.textContent = isSelected ? t('removeFromComparison') : t('addToComparison');
   compareBtn.style.background = isSelected ? "#e53935" : "#cbbd9a";
   compareBtn.onclick = () => {
+    playSound('press.mp3');
     togglePlayerComparison(nick);
-    compareBtn.textContent = comparisonPlayers.includes(nick) ? t('removeCompare') : t('compare');
+    compareBtn.textContent = comparisonPlayers.includes(nick) ? t('removeFromComparison') : t('addToComparison');
     compareBtn.style.background = comparisonPlayers.includes(nick) ? "#e53935" : "#cbbd9a";
     
     // Jeśli jest 2+ graczy, pokaż przycisk porównania
