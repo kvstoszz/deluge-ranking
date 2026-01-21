@@ -42,6 +42,15 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
   cursor: url('cursortext.png') 0 0, text;
 }
 
+/* Ustaw cursor.png dla pola lidera */
+.leader-item {
+  cursor: url('cursor.png'), auto !important;
+}
+
+.leader-item:hover {
+  cursor: url('cursor.png'), auto !important;
+}
+
 /* cała strona */
 .page {
   min-height: 100vh;
@@ -161,6 +170,14 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
 }
 
 /* tytuł */
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 .title h1 {
   margin: 0;
   font-family: 'Cinzel', serif;
@@ -171,6 +188,9 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
     0 0 4px #3b3b3b,
     0 0 8px #3b3b3b,
     0 0 12px #3b3b3b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* podtytuł */
@@ -184,6 +204,70 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
     0 0 4px #3b3b3b,
     0 0 8px #3b3b3b,
     0 0 12px #3b3b3b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+@keyframes easterKClick {
+  0% {
+    transform: scale(1.0);
+  }
+  50% {
+    transform: scale(0.75);
+  }
+  100% {
+    transform: scale(1.0);
+  }
+}
+
+#title-main .easter-k.easter-k-clicked {
+  animation: easterKClick 0.3s ease-out;
+}
+
+/* Media queries dla mniejszych ekranów */
+@media (max-width: 1600px) {
+  .title h1 {
+    font-size: 48px;
+    letter-spacing: 2px;
+  }
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .title h1 {
+    font-size: 40px;
+    letter-spacing: 1.5px;
+  }
+  .subtitle {
+    font-size: 11px;
+    letter-spacing: 0.3px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .title h1 {
+    font-size: 32px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    font-size: 10px;
+    letter-spacing: 0px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .title h1 {
+    font-size: 28px;
+    letter-spacing: 0.8px;
+  }
+  .subtitle {
+    font-size: 9px;
+  }
 }
 
 /* kontener rankingu */
@@ -372,12 +456,16 @@ tr:hover .rank-icon {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.3px;
-  color: #d4c5a0;
+  color: #e8dcc8;
   transition: all 0.2s ease;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5), 0 0 6px rgba(203, 189, 154, 0.3);
+  filter: drop-shadow(0 0 2px rgba(203, 189, 154, 0.4));
 }
 
 tr:hover .rank-name {
   transform: scale(1.06);
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5), 0 0 8px rgba(203, 189, 154, 0.5);
+  filter: drop-shadow(0 0 4px rgba(203, 189, 154, 0.6));
 }
 
 .player-name {
@@ -725,40 +813,49 @@ tr.top-10:hover td {
 /* Language selector */
 .language-selector {
   position: absolute;
-  right: 0;
-  top: 0;
+  right: 4px;
+  top: -13px;
   display: flex;
-  gap: 8px;
+  gap: 12px;
   background: rgba(0, 0, 0, 0.5);
-  padding: 8px 12px;
+  padding: 12px 16px;
   border-radius: 8px;
   border: 1px solid rgba(203, 189, 154, 0.3);
+  align-items: center;
 }
 
 .lang-btn {
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  border: 1px solid rgba(203, 189, 154, 0.4);
-  border-radius: 4px;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(203, 189, 154, 0.3);
+  border-radius: 6px;
   background: transparent;
-  color: #999;
   cursor: url('cursorclick.png'), pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.lang-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .lang-btn:hover {
-  color: #cbbd9a;
   border-color: #cbbd9a;
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(203, 189, 154, 0.2);
 }
 
 .lang-btn.active {
-  background: #cbbd9a;
-  color: #000;
-  border-color: #cbbd9a;
-  font-weight: 700;
+  border-color: #ffd700;
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.4);
+  transform: scale(1.1);
 }
 
 /* Sort indicator */
@@ -798,6 +895,285 @@ th[data-sort-col].sort-desc .sort-indicator::after {
   padding: 0 0.05em; /* give tiny hover area to make cursor switch reliable */
 }
 
+/* CONTRIBUTORS & SUPPORTERS SECTION */
+.supporters-floating {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 99;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 44px;
+  height: 44px;
+}
+
+.supporters-toggle {
+  background: rgba(203, 189, 154, 0.2);
+  border: 1px solid rgba(203, 189, 154, 0.4);
+  color: #cbbd9a;
+  padding: 12px 16px;
+  border-radius: 10px;
+  cursor: url('cursorclick.png'), pointer;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.supporters-toggle:hover {
+  background: rgba(203, 189, 154, 0.35);
+  border-color: rgba(203, 189, 154, 0.7);
+  box-shadow: 0 0 12px rgba(203, 189, 154, 0.25);
+  transform: scale(1.15);
+}
+
+.supporters-icon {
+  font-size: 24px;
+  display: inline-block;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  filter: drop-shadow(0 0 4px rgba(203, 189, 154, 0.5));
+  cursor: url('cursorclick.png'), pointer !important;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.supporters-toggle:hover .supporters-icon {
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(203, 189, 154, 0.9));
+}
+
+.supporters-label {
+  cursor: url('cursorclick.png'), pointer !important;
+}
+
+.supporters-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: #cbbd9a;
+  font-size: 24px;
+  cursor: url('cursorclick.png'), pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.supporters-close:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.supporters-panel {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 12px;
+  background: rgba(15, 15, 15, 0.97);
+  border: 2px solid rgba(203, 189, 154, 0.3);
+  border-radius: 14px;
+  padding: 0;
+  width: 520px;
+  max-width: 90vw;
+  backdrop-filter: blur(6px);
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  opacity: 0;
+  transform: translateY(12px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 1;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  overflow: visible;
+  max-height: none;
+}
+
+.supporters-panel.active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.supporters-leader-section {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 215, 0, 0.04));
+  border-bottom: 2px solid rgba(203, 189, 154, 0.3);
+  padding: 24px 28px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+}
+
+.supporters-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(203, 189, 154, 0.3), transparent);
+  margin: 0;
+}
+
+.supporters-content {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.supporters-section-large {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+  padding: 24px 28px;
+  flex: 1;
+  min-width: 0;
+}
+
+.supporters-section-large:first-child {
+  border-right: 1px solid rgba(203, 189, 154, 0.2);
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.section-icon {
+  font-size: 36px;
+  filter: drop-shadow(0 0 6px rgba(203, 189, 154, 0.3));
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #cbbd9a;
+  text-shadow: 0 0 4px rgba(203, 189, 154, 0.2);
+}
+
+.supporters-section-large.center .section-title {
+  color: #ffd700;
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.3);
+}
+
+.supporters-list-large {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.supporter-item-large {
+  font-size: 14px;
+  color: #d4c5a0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: rgba(203, 189, 154, 0.08);
+  transition: all 0.2s ease;
+  cursor: default;
+  border: 1px solid transparent;
+}
+
+.supporter-item-large:hover {
+  background: rgba(203, 189, 154, 0.15);
+  color: #e8dcc8;
+  border-color: rgba(203, 189, 154, 0.3);
+  transform: translateY(-2px);
+}
+
+.supporter-item-large.leader-item {
+  font-weight: 700;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  text-shadow: 0 0 4px rgba(255, 215, 0, 0.2);
+  font-size: 14px;
+  padding: 10px 10px;
+  cursor: inherit !important;
+}
+
+.supporter-item-large.leader-item:hover {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffed4e;
+  border-color: rgba(255, 215, 0, 0.4);
+  cursor: default !important;
+}
+
+.supporter-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.contributor-clickable {
+  cursor: url('cursorclick.png'), pointer !important;
+  font-weight: 600;
+}
+
+.contributor-clickable:hover {
+  background: rgba(203, 189, 154, 0.2) !important;
+  color: #ffd700 !important;
+}
+
+.supporter-description {
+  font-size: 12px;
+  color: #9d8f73;
+  padding: 8px 12px 10px 12px;
+  background: rgba(203, 189, 154, 0.05);
+  border-radius: 0 0 6px 6px;
+  border-top: 1px solid rgba(203, 189, 154, 0.15);
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.25s ease, padding 0.25s ease;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.supporter-description.active {
+  max-height: 500px;
+  opacity: 1;
+  padding: 10px 12px 12px 12px;
+  overflow: visible;
+}
+
+.creator-link {
+  text-decoration: none;
+  color: #d4c5a0;
+  cursor: url('cursorclick.png'), pointer !important;
+  font-weight: 600;
+  display: block;
+  transition: all 0.2s ease;
+}
+
+.creator-link:hover {
+  background: rgba(203, 189, 154, 0.2) !important;
+  color: #ffd700 !important;
+  text-decoration: none;
+}
+
+.creator-link:active {
+  transform: scale(0.98);
+}
+
   </style>
 </head>
 <body>
@@ -815,9 +1191,9 @@ th[data-sort-col].sort-desc .sort-indicator::after {
   </div>
 
   <div class="language-selector">
-    <button class="lang-btn active" data-lang="pl">PL</button>
-    <button class="lang-btn" data-lang="en">EN</button>
-    <button class="lang-btn" data-lang="sl">ŚL</button>
+    <button class="lang-btn active" data-lang="pl"><img src="iconpl.png" alt="Polski"></button>
+    <button class="lang-btn" data-lang="en"><img src="iconen.png" alt="English"></button>
+    <button class="lang-btn" data-lang="sl"><img src="iconsl.png" alt="Ślōnski"></button>
   </div>
 </header>
 
@@ -1052,7 +1428,78 @@ th[data-sort-col].sort-desc .sort-indicator::after {
 
 <button id="comparison-btn" style="position: fixed; bottom: 30px; right: 30px; padding: 12px 20px; background: #cbbd9a; color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; display: none; z-index: 100; transition: all 0.2s ease;" onclick="playSound('compare.mp3'); if(comparisonPlayers.length === 2) openComparison()">Porównaj (0/2)</button>
 
+<div class="supporters-floating">
+  <button class="supporters-toggle" id="supporters-toggle">
+    <span class="supporters-icon">★</span>
+    <span class="supporters-label" id="supporters-label-text">Wspierający</span>
+  </button>
+  <div class="supporters-panel" id="supporters-panel">
+    <button class="supporters-close" id="supporters-close">✕</button>
+    
+    <div class="supporters-leader-section">
+      <div class="section-header">
+        <span class="section-icon">👑</span>
+        <div class="section-title" id="supporters-title-leader">Lider Projektu</div>
+      </div>
+      <div class="supporters-list-large leader-list" id="leader-list">
+        <div class="supporter-item-large leader-item">Kustosz</div>
+      </div>
+    </div>
 
+    <div class="supporters-divider"></div>
+
+    <div class="supporters-content">
+      <div class="supporters-section-large">
+        <div class="section-header">
+          <span class="section-icon">★</span>
+          <div class="section-title" id="supporters-title-contributors">Kontrybutorzy</div>
+        </div>
+        <div class="supporters-list-large" id="contributors-list">
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="kustosz">🗿Kustosz</div>
+            <div class="supporter-description" id="desc-kustosz" data-translation-key="contribDescKustosz">Główny zarządca projektu The Deluge Matchmaking, zarządca infrastruktury serwerowej oraz bazy danych, programista backendu, twórca systemu rankingowego oraz mechaniki gry.</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="hawriil">🤖Hawriil</div>
+            <div class="supporter-description" id="desc-hawriil" data-translation-key="contribDescHawriil">Główny zarządca i programista Discordowego bota Rozjemca, odpowiadającego za organizację meczy.</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="shalte">🐷Shalte</div>
+            <div class="supporter-description" id="desc-shalte" data-translation-key="contribDescShalte">Inicjator pomysłu, i nie wiem co jeszcze.</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="hromiczekk">🖥️Hromiczekk</div>
+            <div class="supporter-description" id="desc-hromiczekk" data-translation-key="contribDescHromiczekk">Główny programista frontendu, odpowiadający za strukturę strony internetowej The Deluge Matchmaking.</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="zares">🖌️Zares</div>
+            <div class="supporter-description" id="desc-zares" data-translation-key="contribDescZares">Twórca graficzny projektu, pomysłodawca.</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="lanos">🦧Lanos</div>
+            <div class="supporter-description" id="desc-lanos" data-translation-key="contribDescLanos">Orangutan.</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="ciom">👽Ciom</div>
+            <div class="supporter-description" id="desc-ciom" data-translation-key="contribDescCiom">Nie wiem</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="supporters-section-large">
+        <div class="section-header">
+          <span class="section-icon">🎬</span>
+          <div class="section-title" id="supporters-title-creators">Kreatorzy Treści</div>
+        </div>
+        <div class="supporters-list-large" id="creators-list">
+          <a href="https://www.youtube.com/@lanos1502" target="_blank" class="supporter-item-large creator-link" data-creator="lanos">Lanos</a>
+          <a href="https://www.youtube.com/@Kustosz2137" target="_blank" class="supporter-item-large creator-link" data-creator="kustosz">Kustosz</a>
+          <a href="https://www.youtube.com/@ZaresTheDeluge" target="_blank" class="supporter-item-large creator-link" data-creator="zares">Zares</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
