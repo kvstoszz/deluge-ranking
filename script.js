@@ -6,7 +6,6 @@ let filteredRows = [];
 let comparisonPlayers = [];
 const MAX_COMPARISON_PLAYERS = 2;
 const contributors = [
-  "Snykas",
   "Kimono",
   "Zares"
 ];
@@ -30,6 +29,12 @@ document.addEventListener('click', function(e) {
   const clickedEaster = el.closest && el.closest('.easter-k');
   if (clickedEaster) {
     playSound('secondclick.mp3');
+    // Dodaj klasę animacji
+    clickedEaster.classList.add('easter-k-clicked');
+    // Usuń klasę po zakończeniu animacji
+    setTimeout(() => {
+      clickedEaster.classList.remove('easter-k-clicked');
+    }, 300);
   }
 }, true);
 
@@ -68,7 +73,18 @@ const translations = {
     colLosses: "Przegrane",
     colMatches: "Mecze",
     colKD: "KD",
-    colWinrate: "Win %"
+    colWinrate: "Win %",
+    supportersContributors: "Kontrybutorzy",
+    supportersCreators: "Kreatorzy Treści",
+    supportersLeader: "Lider Projektu",
+    supportersButtonLabel: "Wspierający",
+    contribDescKustosz: "Główny zarządca projektu The Deluge Matchmaking, zarządca infrastruktury serwerowej oraz bazy danych, programista backendu, twórca systemu rankingowego oraz mechaniki gry.",
+    contribDescHawriil: "Główny zarządca i programista Discordowego bota Rozjemca, odpowiadającego za organizację meczy.",
+    contribDescShalte: "Inicjator pomysłu, i nie wiem co jeszcze.",
+    contribDescHromiczekk: "Główny programista frontendu, odpowiadający za strukturę strony internetowej The Deluge Matchmaking.",
+    contribDescZares: "Twórca graficzny projektu, pomysłodawca.",
+    contribDescLanos: "Orangutan.",
+    contribDescCiom: "Nie wiem"
   },
   en: {
     searchPlaceholder: "Search player...",
@@ -99,7 +115,18 @@ const translations = {
     colLosses: "Losses",
     colMatches: "Matches",
     colKD: "KD",
-    colWinrate: "Win %"
+    colWinrate: "Win %",
+    supportersContributors: "Contributors",
+    supportersCreators: "Content Creators",
+    supportersLeader: "Project Leader",
+    supportersButtonLabel: "Supporters",
+    contribDescKustosz: "Main administrator of The Deluge Matchmaking project, server infrastructure manager and database administrator, backend programmer, creator of the ranking system and game mechanics.",
+    contribDescHawriil: "Main administrator and programmer of the Discord bot Rozjemca, responsible for match organization.",
+    contribDescShalte: "Initiator of the idea, and I don't know what else.",
+    contribDescHromiczekk: "Main frontend programmer, responsible for the structure of The Deluge Matchmaking website.",
+    contribDescZares: "Graphic designer of the project, ideator.",
+    contribDescLanos: "Orangutan.",
+    contribDescCiom: "I don't know"
   },
   sl: {
     searchPlaceholder: "Szukej szpilera...",
@@ -130,7 +157,18 @@ const translations = {
     colLosses: "Niderlagi",
     colMatches: "Mecze",
     colKD: "KD",
-    colWinrate: "Zwyciyjnstwo %"
+    colWinrate: "Zwyciyjnstwo %",
+    supportersContributors: "Kontrybutorzy",
+    supportersCreators: "Kreatorzy Treści",
+    supportersLeader: "Lider Projektu",
+    supportersButtonLabel: "Wspierający",
+    contribDescKustosz: "Główny zarządca projektu The Deluge Matchmaking, zarządca infrastruktury serwerowej oraz bazy danych, programista backendu, twórca systemu rankingowego oraz mechaniki gry.",
+    contribDescHawriil: "Główny zarządca i programista Discordowego bota Rozjemca, odpowiadającego za organizację meczy.",
+    contribDescShalte: "Inicjator pomysłu, i nie wiem co jeszcze.",
+    contribDescHromiczekk: "Główny programista frontendu, odpowiadający za strukturę strony internetowej The Deluge Matchmaking.",
+    contribDescZares: "Twórca graficzny projektu, pomysłodawca.",
+    contribDescLanos: "Orangutan.",
+    contribDescCiom: "Nie wiem"
   }
 };
 
@@ -155,11 +193,17 @@ function updateLanguageUI() {
 }
 
 function applyTranslations() {
+  // Aktualizuj tytuł główny
   const titleElement = document.getElementById('title-main');
   if (titleElement) {
-    if (!titleElement.querySelector('.easter-k')) {
-      titleElement.innerHTML = 'The Deluge Matc<span class="easter-k">k</span>making';
-    }
+    const prefix = currentLanguage === 'sl' ? 'Srogi Zalōnie ' : 'The Deluge ';
+    titleElement.innerHTML = prefix + 'Matchma<span class="easter-k">k</span>ing';
+  }
+  
+  // Aktualizuj podtytuł
+  const subtitleElement = document.getElementById('title-sub');
+  if (subtitleElement) {
+    subtitleElement.textContent = t('titleSub');
   }
   
   // Aktualizuj placeholder wyszukiwarki
@@ -277,12 +321,93 @@ function applyTranslations() {
   if (comparisonModal && !comparisonModal.classList.contains('hidden')) {
     updateComparisonModalLabels();
   }
+  
+  // Aktualizuj tytuły sekcji Supporters
+  const supportersContribTitle = document.getElementById('supporters-title-contributors');
+  if (supportersContribTitle) {
+    supportersContribTitle.textContent = t('supportersContributors');
+  }
+  
+  const supportersLeaderTitle = document.getElementById('supporters-title-leader');
+  if (supportersLeaderTitle) {
+    supportersLeaderTitle.textContent = t('supportersLeader');
+  }
+  
+  const supportersCreatorsTitle = document.getElementById('supporters-title-creators');
+  if (supportersCreatorsTitle) {
+    supportersCreatorsTitle.textContent = t('supportersCreators');
+  }
+  
+  // Aktualizuj tekst przycisku wspierajacy
+  const supportersLabelText = document.getElementById('supporters-label-text');
+  if (supportersLabelText) {
+    supportersLabelText.textContent = t('supportersButtonLabel');
+  }
+  
+  // Aktualizuj opisy kontrybutorów
+  document.querySelectorAll('[data-translation-key]').forEach(elem => {
+    const key = elem.getAttribute('data-translation-key');
+    if (key && t(key)) {
+      elem.textContent = t(key);
+    }
+  });
 }
 
 // Inicjalizacja języka przy załadowaniu strony
 window.addEventListener('load', () => {
   updateLanguageUI();
   applyTranslations();
+  
+  // Inicjalizuj toggle dla supporters
+  const supportersToggle = document.getElementById('supporters-toggle');
+  const supportersPanel = document.getElementById('supporters-panel');
+  const supportersClose = document.getElementById('supporters-close');
+  
+  if (supportersToggle && supportersPanel) {
+    supportersToggle.addEventListener('click', (e) => {
+      playSound('press.mp3');
+      supportersPanel.classList.toggle('active');
+      e.stopPropagation();
+    });
+  }
+  
+  if (supportersClose) {
+    supportersClose.addEventListener('click', (e) => {
+      playSound('press.mp3');
+      supportersPanel.classList.remove('active');
+      e.stopPropagation();
+    });
+  }
+  
+  // Zamknij panel gdy klikniesz poza nim
+  document.addEventListener('click', (e) => {
+    const langBtn = e.target.closest('.lang-btn');
+    if (supportersPanel && !supportersPanel.contains(e.target) && e.target !== supportersToggle && !langBtn) {
+      supportersPanel.classList.remove('active');
+    }
+  });
+  
+  // Obsługa kliknięć na kontrybutorów - pokaż/ukryj opisy
+  document.querySelectorAll('.contributor-clickable').forEach(elem => {
+    elem.addEventListener('click', (e) => {
+      e.preventDefault();
+      playSound('press.mp3');
+      const contributor = elem.dataset.contributor;
+      const descElem = document.getElementById(`desc-${contributor}`);
+      
+      if (descElem) {
+        // Zamknij wszystkie inne opisy
+        document.querySelectorAll('.supporter-description.active').forEach(desc => {
+          if (desc !== descElem) {
+            desc.classList.remove('active');
+          }
+        });
+        
+        // Toggle aktualny opis
+        descElem.classList.toggle('active');
+      }
+    });
+  });
 });
 
 // Dodaj nasłuchiwanie przycisków językowych
@@ -334,7 +459,7 @@ function getRank(elo) {
     return { name: "Tatar Krymski", color: "#001b44", icon: "ranks/tatar.png", className: "rank-tatar" };
   }
   if (elo < 1601) {
-    return { name: "Dragon", color: "#154115", icon: "ranks/dragon.png", className: "rank-dragon" };
+    return { name: "Dragon", color: "#0345bf", icon: "ranks/dragon.png", className: "rank-dragon" };
   }
   if (elo < 1801) {
     return { name: "Rezun", color: "#78ab67", icon: "ranks/rezun.png", className: "rank-rezun" };
@@ -686,11 +811,11 @@ if (pc) pc.textContent = allRows.length;
   displayed = 0;
   tbody.innerHTML = "";
 
-  // track initial displayed count and increments stack for Show less
+  // pokaz mniej zmienne
   let initialDisplayed = null;
   const incrementsStack = [];
 
-  // helper to update Show less button visibility and text
+  // pokaż mniej przycisk
   const showLessBtn = document.getElementById('show-less-btn');
   function updateShowLessUI() {
     if (!showLessBtn) return;
@@ -743,7 +868,7 @@ rowHtml += `
     <div class="cell-content">
       <span class="rank ${rank.className}" style="color:${rank.color}">
         <img src="${rank.icon}" class="rank-icon" alt="${rank.name}">
-        <span class="rank-name">${rank.name}</span>
+        <span class="rank-name" style="color:${rank.color}">${rank.name}</span>
       </span>
       <span class="player-name${isContributor ? " contributor-glow" : ""}">
         ${cell.v}
