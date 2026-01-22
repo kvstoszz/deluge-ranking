@@ -64,7 +64,7 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
 .header {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 40px;
   margin-top: 25px;
   margin-bottom: 20px;
   padding: 5px 0;
@@ -155,6 +155,7 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
 .logo {
   max-width: 360px;
   height: auto;
+  padding-top: 15px;
 }
 
 /* ---- winieta */
@@ -176,6 +177,7 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
   align-items: flex-start;
   gap: 8px;
   flex-shrink: 0;
+  padding-top: 15px;
 }
 
 .title h1 {
@@ -274,8 +276,115 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
 .ranking-wrapper {
   display: flex;
   justify-content: center;
-  padding: 0 5px;
-  min-width: 1200px;
+  align-items: flex-start;
+  gap: 30px;
+  padding: 0 20px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.ranking-main {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ranking-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 280px;
+}
+
+.sidebar-box {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(203, 189, 154, 0.2);
+  overflow: hidden;
+}
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebar-leader-section {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.18), rgba(255, 215, 0, 0.10));
+  border-bottom: 3px solid rgba(255, 215, 0, 0.5);
+  padding: 18px 20px;
+  text-align: center;
+  order: -1;
+}
+
+.sidebar-leader-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffd700;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.5), 0 0 12px rgba(255, 215, 0, 0.3);
+  opacity: 1;
+  margin-bottom: 10px;
+}
+
+.sidebar-leader-name {
+  font-weight: 800;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.15);
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.4), 0 0 4px rgba(255, 215, 0, 0.2);
+  font-size: 15px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+}
+
+.sidebar-box .section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  text-align: center;
+  padding: 20px 20px 0 20px;
+}
+
+.sidebar-box .sidebar-list {
+  padding: 0;
+}
+
+.sidebar-contributors-content {
+  padding: 20px;
+  gap: 10px;
+}
+
+.sidebar-creators-list {
+  padding: 20px;
+  gap: 10px;
+}
+
+.sidebar-box .section-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 0 6px rgba(203, 189, 154, 0.3));
+}
+
+.sidebar-box .section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #cbbd9a;
+  text-shadow: 0 0 4px rgba(203, 189, 154, 0.2);
+}
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .contributor-glow {
@@ -816,12 +925,50 @@ tr.top-10:hover td {
   right: 4px;
   top: -13px;
   display: flex;
-  gap: 12px;
+  gap: 18px;
   background: rgba(0, 0, 0, 0.5);
   padding: 12px 16px;
   border-radius: 8px;
   border: 1px solid rgba(203, 189, 154, 0.3);
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.lang-option {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 0;
+  position: relative;
+  justify-content: flex-start;
+}
+
+.lang-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbbd9a;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: all 0.3s ease;
+  cursor: url('cursortext.png') 0 0, text;
+  white-space: nowrap;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(203, 189, 154, 0.3);
+  padding: 6px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  scale: 0;
+}
+
+.lang-option:hover .lang-label {
+  opacity: 1;
+  scale: 1;
+  pointer-events: auto;
 }
 
 .lang-btn {
@@ -896,191 +1043,7 @@ th[data-sort-col].sort-desc .sort-indicator::after {
 }
 
 /* CONTRIBUTORS & SUPPORTERS SECTION */
-.supporters-floating {
-  position: fixed;
-  bottom: 30px;
-  left: 30px;
-  z-index: 99;
-  font-family: 'Inter', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 44px;
-  height: 44px;
-}
-
-.supporters-toggle {
-  background: rgba(203, 189, 154, 0.2);
-  border: 1px solid rgba(203, 189, 154, 0.4);
-  color: #cbbd9a;
-  padding: 12px 16px;
-  border-radius: 10px;
-  cursor: url('cursorclick.png'), pointer;
-  font-weight: 600;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  letter-spacing: 0.5px;
-  position: relative;
-  z-index: 2;
-  white-space: nowrap;
-}
-
-.supporters-toggle:hover {
-  background: rgba(203, 189, 154, 0.35);
-  border-color: rgba(203, 189, 154, 0.7);
-  box-shadow: 0 0 12px rgba(203, 189, 154, 0.25);
-  transform: scale(1.15);
-}
-
-.supporters-icon {
-  font-size: 24px;
-  display: inline-block;
-  transition: transform 0.3s ease, filter 0.3s ease;
-  filter: drop-shadow(0 0 4px rgba(203, 189, 154, 0.5));
-  cursor: url('cursorclick.png'), pointer !important;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.supporters-toggle:hover .supporters-icon {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 8px rgba(203, 189, 154, 0.9));
-}
-
-.supporters-label {
-  cursor: url('cursorclick.png'), pointer !important;
-}
-
-.supporters-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: transparent;
-  border: none;
-  color: #cbbd9a;
-  font-size: 24px;
-  cursor: url('cursorclick.png'), pointer;
-  opacity: 0.6;
-  transition: all 0.2s ease;
-  padding: 0;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.supporters-close:hover {
-  opacity: 1;
-  transform: scale(1.15);
-}
-
-.supporters-panel {
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  margin-bottom: 12px;
-  background: rgba(15, 15, 15, 0.97);
-  border: 2px solid rgba(203, 189, 154, 0.3);
-  border-radius: 14px;
-  padding: 0;
-  width: 520px;
-  max-width: 90vw;
-  backdrop-filter: blur(6px);
-  display: none;
-  flex-direction: column;
-  gap: 0;
-  opacity: 0;
-  transform: translateY(12px) scale(0.95);
-  pointer-events: none;
-  transition: all 0.3s ease;
-  z-index: 1;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  overflow: visible;
-  max-height: none;
-}
-
-.supporters-panel.active {
-  display: flex;
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-}
-
-.supporters-leader-section {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 215, 0, 0.04));
-  border-bottom: 2px solid rgba(203, 189, 154, 0.3);
-  padding: 24px 28px 24px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  text-align: center;
-}
-
-.supporters-divider {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(203, 189, 154, 0.3), transparent);
-  margin: 0;
-}
-
-.supporters-content {
-  display: flex;
-  gap: 0;
-  width: 100%;
-  flex-wrap: nowrap;
-}
-
-.supporters-section-large {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  text-align: center;
-  padding: 24px 28px;
-  flex: 1;
-  min-width: 0;
-}
-
-.supporters-section-large:first-child {
-  border-right: 1px solid rgba(203, 189, 154, 0.2);
-}
-
-.section-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 4px;
-}
-
-.section-icon {
-  font-size: 36px;
-  filter: drop-shadow(0 0 6px rgba(203, 189, 154, 0.3));
-}
-
-.section-title {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  color: #cbbd9a;
-  text-shadow: 0 0 4px rgba(203, 189, 154, 0.2);
-}
-
-.supporters-section-large.center .section-title {
-  color: #ffd700;
-  text-shadow: 0 0 4px rgba(255, 215, 0, 0.3);
-}
-
-.supporters-list-large {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
+/* SUPPORTERS SECTION */
 .supporter-item-large {
   font-size: 14px;
   color: #d4c5a0;
@@ -1174,6 +1137,258 @@ th[data-sort-col].sort-desc .sort-indicator::after {
   transform: scale(0.98);
 }
 
+.contributor-quote {
+  font-size: 12px;
+  color: #a89968;
+  font-style: italic;
+  padding: 0 12px 0 12px;
+  background: rgba(203, 189, 154, 0.08);
+  border-left: 3px solid rgba(255, 215, 0, 0.25);
+  border-radius: 0 4px 4px 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.4;
+  font-weight: 500;
+  word-wrap: break-word;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.25s ease, padding 0.25s ease, margin 0.25s ease;
+}
+
+.contributor-quote.active {
+  max-height: 300px;
+  opacity: 1;
+  padding: 10px 12px 12px 12px;
+  margin-bottom: 12px;
+  overflow: visible;
+}
+
+.creator-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(203, 189, 154, 0.08);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  cursor: url('cursor.png'), auto;
+}
+
+.creator-item:hover {
+  background: rgba(203, 189, 154, 0.12);
+}
+
+.creator-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(203, 189, 154, 0.3);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.creator-item:hover .creator-avatar {
+  border-color: #ffd700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.creator-name {
+  flex: 1;
+  color: #d4c5a0;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.creator-youtube-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: url('cursorclick.png'), pointer !important;
+  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.creator-youtube-link:hover {
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.creator-youtube-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.creator-youtube-link:hover .creator-youtube-icon {
+  opacity: 1;
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.4));
+}
+
+/* FAQ Panel */
+.faq-panel {
+  position: fixed;
+  left: -420px;
+  top: 0;
+  width: 400px;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.95);
+  border-right: 2px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-panel.open {
+  left: 0;
+}
+
+#faq-btn {
+  cursor: url('cursorclick.png'), pointer;
+}
+
+#faq-btn:hover {
+  background: #ffed4e;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+  transform: scale(1.05);
+  cursor: url('cursorclick.png'), pointer;
+}
+
+.faq-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+}
+
+.faq-header h2 {
+  color: #ffd700;
+  font-size: 18px;
+  margin: 0;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.3);
+}
+
+.faq-close {
+  background: transparent;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: #ffd700;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: url('cursorclick.png'), pointer;
+  font-size: 18px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.faq-close:hover {
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+  cursor: url('cursorclick.png'), pointer;
+}
+
+.faq-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(203, 189, 154, 0.15);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.faq-question {
+  padding: 16px 20px;
+  cursor: url('cursorclick.png'), pointer !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #cbbd9a;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.faq-question span {
+  pointer-events: none;
+  cursor: url('cursorclick.png'), pointer !important;
+}
+
+.faq-question:hover {
+  background: rgba(255, 215, 0, 0.08);
+  color: #ffd700;
+  cursor: url('cursorclick.png'), pointer !important;
+}
+
+.faq-toggle {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  color: #ffd700;
+  font-size: 12px;
+}
+
+.faq-item.active .faq-toggle {
+  transform: rotate(90deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 500px;
+  padding: 8px 20px 16px 42px;
+}
+
+.faq-answer p {
+  color: #a89968;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  word-wrap: break-word;
+}
+
+/* Scroll bar for FAQ */
+.faq-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.faq-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.faq-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 215, 0, 0.2);
+  border-radius: 3px;
+}
+
+.faq-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 215, 0, 0.4);
+}
+
   </style>
 </head>
 <body>
@@ -1191,9 +1406,18 @@ th[data-sort-col].sort-desc .sort-indicator::after {
   </div>
 
   <div class="language-selector">
-    <button class="lang-btn active" data-lang="pl"><img src="iconpl.png" alt="Polski"></button>
-    <button class="lang-btn" data-lang="en"><img src="iconen.png" alt="English"></button>
-    <button class="lang-btn" data-lang="sl"><img src="iconsl.png" alt="Ślōnski"></button>
+    <div class="lang-option">
+      <button class="lang-btn active" data-lang="pl"><img src="iconpl.png" alt="Polski"></button>
+      <span class="lang-label">PL</span>
+    </div>
+    <div class="lang-option">
+      <button class="lang-btn" data-lang="en"><img src="iconen.png" alt="English"></button>
+      <span class="lang-label">EN</span>
+    </div>
+    <div class="lang-option">
+      <button class="lang-btn" data-lang="sl"><img src="iconsl.png" alt="Ślōnski"></button>
+      <span class="lang-label">ŚL</span>
+    </div>
   </div>
 </header>
 
@@ -1224,11 +1448,101 @@ th[data-sort-col].sort-desc .sort-indicator::after {
 </div>
 
 <div class="ranking-wrapper">
-  <div class="table-wrapper">
-    <table id="ranking">
-      <thead></thead>
-      <tbody></tbody>
-    </table>
+  <div class="ranking-main">
+    <div class="table-wrapper">
+      <table id="ranking">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ranking-sidebar">
+    <!-- Contributors box -->
+    <div class="sidebar-box">
+      <div class="sidebar-list" id="sidebar-contributors-list">
+        <div class="sidebar-leader-section">
+          <div class="sidebar-leader-title">👑 Lider Projektu</div>
+          <div class="sidebar-leader-name">Kustosz</div>
+        </div>
+      </div>
+      <div class="section-header">
+        <span class="section-icon">★</span>
+        <div class="section-title" id="contributors-title" data-translation-key="supportersContributors">Kontrybutorzy</div>
+      </div>
+      <div class="sidebar-list" id="sidebar-contributors-list-content">
+        <div class="sidebar-contributors-content">
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="kustosz">🗿Kustosz</div>
+            <div class="supporter-description" id="desc-kustosz" data-translation-key="contribDescKustosz">Główny zarządca projektu The Deluge Matchmaking, zarządca infrastruktury serwerowej oraz bazy danych, programista backendu, twórca systemu rankingowego oraz mechaniki gry.</div>
+            <div class="contributor-quote" id="quote-kustosz" data-translation-key="quoteKustosz">"Wszystko zaczyna się od prawdziwej pasji."</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="hawriil">🤖Hawriil</div>
+            <div class="supporter-description" id="desc-hawriil" data-translation-key="contribDescHawriil">Główny zarządca i programista Discordowego bota Rozjemca, odpowiadającego za organizację meczy.</div>
+            <div class="contributor-quote" id="quote-hawriil" data-translation-key="quoteHawriil">"Bot musi być jak zegarek - precyzyjny i niezawodny."</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="jessica">🐷Jessica</div>
+            <div class="supporter-description" id="desc-jessica" data-translation-key="contribDescJessica">Inicjator pomysłu, twórca regulaminu The Deluge Matchmaking.</div>
+            <div class="contributor-quote" id="quote-jessica" data-translation-key="quoteJessica">"Dobrze zorganizowana społeczność to siła."</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="hromiczekk">🖥️Hromiczekk</div>
+            <div class="supporter-description" id="desc-hromiczekk" data-translation-key="contribDescHromiczekk">Główny programista frontendu, odpowiadający za strukturę strony internetowej The Deluge Matchmaking.</div>
+            <div class="contributor-quote" id="quote-hromiczekk" data-translation-key="quoteHromiczekk">"Frontend to nie tylko kod, to doświadczenie użytkownika."</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="zares">🖌️Zares</div>
+            <div class="supporter-description" id="desc-zares" data-translation-key="contribDescZares">Twórca graficzny projektu, pomysłodawca.</div>
+            <div class="contributor-quote" id="quote-zares" data-translation-key="quoteZares">"Design to powiedzenie czegoś bez słów."</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="lanos">🦧Lanos</div>
+            <div class="supporter-description" id="desc-lanos" data-translation-key="contribDescLanos">Orangutan.</div>
+            <div class="contributor-quote" id="quote-lanos" data-translation-key="quoteLanos">"Huu huu!"</div>
+          </div>
+          <div class="supporter-item-wrapper">
+            <div class="supporter-item-large contributor-clickable" data-contributor="ciom">👽Ciom</div>
+            <div class="supporter-description" id="desc-ciom" data-translation-key="contribDescCiom">Nie wiem</div>
+            <div class="contributor-quote" id="quote-ciom" data-translation-key="quoteCiom">"..."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Media Creators box -->
+    <div class="sidebar-box">
+      <div class="section-header">
+        <span class="section-icon">🎬</span>
+        <div class="section-title" id="creators-title" data-translation-key="supportersCreators">Kreatorzy Treści</div>
+      </div>
+      <div class="sidebar-list" id="sidebar-creators-list" style="padding: 20px; gap: 10px;">
+        <div class="creator-item" data-creator="kustosz">
+          <img src="https://yt3.googleusercontent.com/NJAggX0jYv-oF7Sq7szQUMWfrTumeTiSZqbP_Gh1Wu8SZm8Q1QWKdLYesgD9ePXb4s7BN7ZONw=s160-c-k-c0x00ffffff-no-rj" alt="Kustosz" class="creator-avatar" id="avatar-kustosz">
+          <span class="creator-name">Kustosz</span>
+          <a href="https://www.youtube.com/@Kustosz2137" target="_blank" class="creator-youtube-link" title="Kanał Youtube">
+            <svg class="creator-youtube-icon" viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
+
+        <div class="creator-item" data-creator="lanos">
+          <img src="https://yt3.googleusercontent.com/ytc/AIdro_n5T29uIFdoe4_CuNNbKOwiNAEedyfLIUs3iP-C1igGtcA=s160-c-k-c0x00ffffff-no-rj" alt="Lanos" class="creator-avatar" id="avatar-lanos">
+          <span class="creator-name">Lanos</span>
+          <a href="https://www.youtube.com/@lanos1502" target="_blank" class="creator-youtube-link" title="Kanał Youtube">
+            <svg class="creator-youtube-icon" viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
+
+        <div class="creator-item" data-creator="zares">
+          <img src="https://yt3.googleusercontent.com/ICNc38DsrSlej_U8-JLZ0T2Ou7IOMQQ-O0EMGxj51ictbJv3aiUIYHKW_hlEZOL3numiQR-8XA=s160-c-k-c0x00ffffff-no-rj" alt="Zares" class="creator-avatar" id="avatar-zares">
+          <span class="creator-name">Zares</span>
+          <a href="https://www.youtube.com/@ZaresTheDeluge" target="_blank" class="creator-youtube-link" title="Kanał Youtube">
+            <svg class="creator-youtube-icon" viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1428,74 +1742,80 @@ th[data-sort-col].sort-desc .sort-indicator::after {
 
 <button id="comparison-btn" style="position: fixed; bottom: 30px; right: 30px; padding: 12px 20px; background: #cbbd9a; color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; display: none; z-index: 100; transition: all 0.2s ease;" onclick="playSound('compare.mp3'); if(comparisonPlayers.length === 2) openComparison()">Porównaj (0/2)</button>
 
-<div class="supporters-floating">
-  <button class="supporters-toggle" id="supporters-toggle">
-    <span class="supporters-icon">★</span>
-    <span class="supporters-label" id="supporters-label-text">Wspierający</span>
-  </button>
-  <div class="supporters-panel" id="supporters-panel">
-    <button class="supporters-close" id="supporters-close">✕</button>
-    
-    <div class="supporters-leader-section">
-      <div class="section-header">
-        <span class="section-icon">👑</span>
-        <div class="section-title" id="supporters-title-leader">Lider Projektu</div>
+<!-- FAQ Button -->
+<button id="faq-btn" style="position: fixed; bottom: 30px; left: 30px; padding: 12px 20px; background: #ffd700; color: #000; border: none; border-radius: 8px; cursor: url('cursorclick.png'), pointer; font-weight: 700; z-index: 100; transition: all 0.2s ease;" onclick="toggleFAQ()">❓ FAQ</button>
+
+<!-- FAQ Panel -->
+<div id="faq-panel" class="faq-panel">
+  <div class="faq-header">
+    <h2 data-translation-key="faqTitle">FAQ - Pytania Częste</h2>
+    <button class="faq-close" onclick="closeFAQ()">✕</button>
+  </div>
+  <div class="faq-content">
+
+    <!-- Question 1 -->
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQItem(this)">
+        <span class="faq-toggle">▶</span>
+        <span data-translation-key="faqQuestion1">Czym jest The Deluge Matchmaking?</span>
       </div>
-      <div class="supporters-list-large leader-list" id="leader-list">
-        <div class="supporter-item-large leader-item">Kustosz</div>
+      <div class="faq-answer">
+        <p data-translation-key="faqAnswer1">Szczerze to jebać deluge</p>
       </div>
     </div>
 
-    <div class="supporters-divider"></div>
-
-    <div class="supporters-content">
-      <div class="supporters-section-large">
-        <div class="section-header">
-          <span class="section-icon">★</span>
-          <div class="section-title" id="supporters-title-contributors">Kontrybutorzy</div>
-        </div>
-        <div class="supporters-list-large" id="contributors-list">
-          <div class="supporter-item-wrapper">
-            <div class="supporter-item-large contributor-clickable" data-contributor="kustosz">🗿Kustosz</div>
-            <div class="supporter-description" id="desc-kustosz" data-translation-key="contribDescKustosz">Główny zarządca projektu The Deluge Matchmaking, zarządca infrastruktury serwerowej oraz bazy danych, programista backendu, twórca systemu rankingowego oraz mechaniki gry.</div>
-          </div>
-          <div class="supporter-item-wrapper">
-            <div class="supporter-item-large contributor-clickable" data-contributor="hawriil">🤖Hawriil</div>
-            <div class="supporter-description" id="desc-hawriil" data-translation-key="contribDescHawriil">Główny zarządca i programista Discordowego bota Rozjemca, odpowiadającego za organizację meczy.</div>
-          </div>
-          <div class="supporter-item-wrapper">
-            <div class="supporter-item-large contributor-clickable" data-contributor="shalte">🐷Shalte</div>
-            <div class="supporter-description" id="desc-shalte" data-translation-key="contribDescShalte">Inicjator pomysłu, i nie wiem co jeszcze.</div>
-          </div>
-          <div class="supporter-item-wrapper">
-            <div class="supporter-item-large contributor-clickable" data-contributor="hromiczekk">🖥️Hromiczekk</div>
-            <div class="supporter-description" id="desc-hromiczekk" data-translation-key="contribDescHromiczekk">Główny programista frontendu, odpowiadający za strukturę strony internetowej The Deluge Matchmaking.</div>
-          </div>
-          <div class="supporter-item-wrapper">
-            <div class="supporter-item-large contributor-clickable" data-contributor="zares">🖌️Zares</div>
-            <div class="supporter-description" id="desc-zares" data-translation-key="contribDescZares">Twórca graficzny projektu, pomysłodawca.</div>
-          </div>
-          <div class="supporter-item-wrapper">
-            <div class="supporter-item-large contributor-clickable" data-contributor="lanos">🦧Lanos</div>
-            <div class="supporter-description" id="desc-lanos" data-translation-key="contribDescLanos">Orangutan.</div>
-          </div>
-          <div class="supporter-item-wrapper">
-            <div class="supporter-item-large contributor-clickable" data-contributor="ciom">👽Ciom</div>
-            <div class="supporter-description" id="desc-ciom" data-translation-key="contribDescCiom">Nie wiem</div>
-          </div>
-        </div>
+    <!-- Question 2 -->
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQItem(this)">
+        <span class="faq-toggle">▶</span>
+        <span data-translation-key="faqQuestion2">Jak działa system rankingowy?</span>
       </div>
+      <div class="faq-answer">
+        <p data-translation-key="faqAnswer2">Jestem gejem, jestem czarny i nie chodzę do kościoła</p>
+      </div>
+    </div>
 
-      <div class="supporters-section-large">
-        <div class="section-header">
-          <span class="section-icon">🎬</span>
-          <div class="section-title" id="supporters-title-creators">Kreatorzy Treści</div>
-        </div>
-        <div class="supporters-list-large" id="creators-list">
-          <a href="https://www.youtube.com/@lanos1502" target="_blank" class="supporter-item-large creator-link" data-creator="lanos">Lanos</a>
-          <a href="https://www.youtube.com/@Kustosz2137" target="_blank" class="supporter-item-large creator-link" data-creator="kustosz">Kustosz</a>
-          <a href="https://www.youtube.com/@ZaresTheDeluge" target="_blank" class="supporter-item-large creator-link" data-creator="zares">Zares</a>
-        </div>
+    <!-- Question 3 -->
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQItem(this)">
+        <span class="faq-toggle">▶</span>
+        <span data-translation-key="faqQuestion3">Jak zagrać mecz?</span>
+      </div>
+      <div class="faq-answer">
+        <p data-translation-key="faqAnswer3">Aby zagrać mecz, włóż sobie palec do dupy i zrób 3 pajacyki</p>
+      </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQItem(this)">
+        <span class="faq-toggle">▶</span>
+        <span data-translation-key="faqQuestion4">Jak dołączyć do Discord?</span>
+      </div>
+      <div class="faq-answer">
+        <p data-translation-key="faqAnswer4">Link do naszego Discorda znajduje się na dole strony. Wystarczy kliknąć w ikonkę, aby zostać przekierowanym!</p>
+      </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQItem(this)">
+        <span class="faq-toggle">▶</span>
+        <span data-translation-key="faqQuestion5">Jak porównać dwóch graczy?</span>
+      </div>
+      <div class="faq-answer">
+        <p data-translation-key="faqAnswer5">Kliknij na gracza w tabeli, a następnie wybierz "Dodaj do porównania". Powtórz dla drugiego gracza i kliknij "Porównaj".</p>
+      </div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFAQItem(this)">
+        <span class="faq-toggle">▶</span>
+        <span data-translation-key="faqQuestion6">Gdzie mogę znaleźć więcej informacji?</span>
+      </div>
+      <div class="faq-answer">
+        <p data-translation-key="faqAnswer6">Odwiedź nasz Discord lub skontaktuj się z administracją projektu. Możesz również sprawdzić sekcję "Kontrybutorzy" aby dowiedzieć się więcej o naszym zespole!</p>
       </div>
     </div>
   </div>
