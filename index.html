@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="logo2.png">
  <style>
@@ -277,6 +277,156 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
   }
 }
 
+/* Media queries dla telefonu */
+@media (max-width: 768px) {
+  body {
+    min-height: 100vh;
+  }
+
+  .header {
+    gap: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    max-width: 280px;
+    height: auto;
+  }
+
+  .title h1 {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  .language-selector {
+    position: relative;
+    right: auto;
+    top: auto;
+    gap: 10px;
+    padding: 8px 12px;
+  }
+
+  .ranking-wrapper {
+    gap: 15px;
+    flex-direction: column;
+    padding: 0 10px;
+  }
+
+  .ranking-main {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .ranking-sidebar {
+    width: 100%;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  table {
+    min-width: 900px;
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .rank-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .rank-name {
+    font-size: 12px;
+  }
+
+  .player-name {
+    font-size: 12px;
+  }
+
+  #search-input {
+    width: 90%;
+    max-width: 300px;
+    font-size: 14px;
+    padding: 10px 14px;
+    padding-right: 35px;
+  }
+
+  .info-box {
+    padding: 8px 14px;
+  }
+
+  .info-value {
+    font-size: 16px;
+  }
+
+  .info-label {
+    font-size: 10px;
+  }
+
+  .logo {
+    max-width: 250px;
+  }
+
+  .sidebar-box {
+    width: 100%;
+  }
+
+  .player-modal-content {
+    min-width: 90vw;
+    max-width: 95vw;
+    gap: 20px;
+    flex-direction: column;
+  }
+
+  .modal-left {
+    width: 100%;
+  }
+
+  .modal-right {
+    width: 100%;
+  }
+
+  #comparison-modal .player-modal-content {
+    min-width: 95vw;
+    max-width: 98vw;
+    gap: 20px;
+  }
+
+  .load-more-wrapper {
+    padding: 0 10px;
+  }
+
+  #load-more-btn,
+  #show-less-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .discord-wrapper {
+    padding: 0 10px;
+  }
+
+  .discord-wrapper a {
+    width: 280px;
+    height: 70px;
+  }
+}
+
 /* kontener rankingu */
 .ranking-wrapper {
   display: flex;
@@ -295,6 +445,8 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
   display: flex;
   justify-content: center;
   flex-shrink: 0;
+  width: 100%;
+  min-width: 0;
 }
 
 .ranking-sidebar {
@@ -429,6 +581,7 @@ table {
   width: 100%;
   max-width: 1200px;
   min-width: 280px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .info-panel {
