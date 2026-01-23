@@ -111,7 +111,7 @@ const translations = {
     colWinrate: "Win %",
     supportersContributors: "Kontrybutorzy",
     supportersCreators: "Kreatorzy Treści",
-    supportersLeader: "Lider Projektu",
+    projectLeader: "👑 Lider Projektu",
     supportersButtonLabel: "Wspierający",
     contribDescKustosz: "Główny zarządca projektu The Deluge Matchmaking, zarządca infrastruktury serwerowej oraz bazy danych, programista backendu, twórca systemu rankingowego oraz mechaniki gry.",
     contribDescHawriil: "Główny zarządca i programista Discordowego bota Rozjemca, odpowiadającego za organizację meczy.",
@@ -433,9 +433,9 @@ function applyTranslations() {
     supportersContribTitle.textContent = t('supportersContributors');
   }
   
-  const supportersLeaderTitle = document.getElementById('supporters-title-leader');
-  if (supportersLeaderTitle) {
-    supportersLeaderTitle.textContent = t('supportersLeader');
+  const projectLeaderTitle = document.getElementById('supporters-title-leader');
+  if (projectLeaderTitle) {
+    projectLeaderTitle.textContent = t('projectLeader');
   }
   
   const supportersCreatorsTitle = document.getElementById('supporters-title-creators');
@@ -561,7 +561,7 @@ function getRank(elo) {
     return { name: "Husarz", color: "#b60707", icon: "ranks/husarz.png", className: "rank-husarz" };
   }
   if (elo < 3001) {
-    return { name: "Hetman", color: "#731f00", icon: "ranks/hetman.png", className: "rank-hetman" };
+    return { name: "Hetman", color: "#743203f3", icon: "ranks/hetman.png", className: "rank-hetman" };
   }
   return { name: "Imperator", color: "#ffd700", icon: "ranks/imperator.png", className: "rank-imperator" };
 }
