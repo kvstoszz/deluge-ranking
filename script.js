@@ -177,7 +177,7 @@ const translations = {
     colWinrate: "Win %",
     supportersContributors: "Contributors",
     supportersCreators: "Content Creators",
-    supportersLeader: "Project Leader",
+    projectLeader: "👑 Project Leader",
     supportersButtonLabel: "Supporters",
     contribDescKustosz: "Main administrator of The Deluge Matchmaking project, server infrastructure manager and database administrator, backend programmer, creator of the ranking system and game mechanics.",
     contribDescHawriil: "Main administrator and programmer of the Discord bot Rozjemca, responsible for match organization.",
@@ -229,7 +229,7 @@ const translations = {
     loading: "Laduje…",
     notFound: "Niy ma szpilera",
     titleMain: "Sroge Zalōnie Matchmaking",
-    titleSub: "Społycznoś hierarchijŎ i statystyki szpilery",
+    titleSub: "HierarchijŎ Społyczności i statystyki szpilery",
     playerRole: "Szpiler",
     colRating: "ôcyna",
     colKills: "Zabōjstwa",
@@ -242,7 +242,7 @@ const translations = {
     colWinrate: "Zwyciyjnstwo %",
     supportersContributors: "Kōntrybutŏrzy",
     supportersCreators: "Kreatŏrzy inhaltōw",
-    supportersLeader: "lajter projektu",
+    projectLeader: "👑 Lajter projektu",
     supportersButtonLabel: "spiyrajōncy",
     contribDescKustosz: "Gōwny administratōr projektu Sroge Zalōnie Matchmaking,administrator infrastrutury serwerowyj a bazy danych, programiŏrz backendutwōrca systymu hierarchiji a funkcji szpilu.",
     contribDescHawriil: "Gōwny administratōr i programiŏrz Discordowygo bota Rozjemca, lajter za ôrganizacyjã meczy.",
@@ -1406,6 +1406,3 @@ window.toggleFAQ = toggleFAQ;
 window.closeFAQ = closeFAQ;
 window.toggleFAQItem = toggleFAQItem;
 }
-
-
-
