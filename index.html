@@ -272,6 +272,210 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
   }
 }
 
+@media (max-width: 768px) {
+  table {
+    min-width: 900px;
+    width: auto;
+  }
+  
+  th:first-child,
+  td:first-child {
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding: 6px 2px;
+  }
+  
+  th, td {
+    padding: 6px 4px;
+    font-size: 10px;
+    border: 1px solid rgba(203, 189, 154, 0.25);
+  }
+  
+  .cell-content {
+    gap: 2px;
+  }
+  
+  tr:hover .cell-content {
+    gap: 2px;
+  }
+  
+  .rank-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .rank-name {
+    font-size: 10px;
+  }
+  
+  .player-name {
+    font-size: 10px;
+  }
+  
+  .rank-medal {
+    font-size: 14px;
+  }
+  
+  .ranking-wrapper {
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 0 10px;
+    position: relative;
+  }
+  
+  .ranking-main {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .ranking-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+  }
+  
+  .table-wrapper {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border-radius: 12px;
+    position: relative;
+    background: url('texture.png');
+    background-size: cover;
+    padding: 4px;
+  }
+  
+  .table-wrapper::before {
+    display: none;
+  }
+  
+  .table-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .sidebar-toggle-input {
+    display: none !important;
+  }
+  
+  .sidebar-toggle-btn {
+    display: none;
+  }
+  
+  /* Na mobile pokazuj przycisk */
+  @media (max-width: 768px) {
+    .sidebar-toggle-btn {
+      display: block;
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 80px;
+      background: linear-gradient(90deg, rgba(203, 189, 154, 0.1), rgba(203, 189, 154, 0.3));
+      border: 2px solid rgba(203, 189, 154, 0.4);
+      border-right: none;
+      border-radius: 12px 0 0 12px;
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #cbbd9a;
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar-toggle-btn::before {
+      content: "◄";
+      font-weight: bold;
+    }
+    
+    .sidebar-toggle-btn:hover {
+      background: linear-gradient(90deg, rgba(203, 189, 154, 0.2), rgba(203, 189, 154, 0.4));
+      border-color: rgba(203, 189, 154, 0.6);
+    }
+    
+    .ranking-sidebar {
+      position: fixed;
+      right: -300px;
+      top: 0;
+      bottom: auto;
+      min-height: 100vh;
+      width: 280px;
+      z-index: 99;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transition: right 0.3s ease;
+      background: rgba(10, 10, 10, 0.311);
+      backdrop-filter: blur(4px);
+      box-shadow: -4px 0 12px rgba(0, 0, 0, 0.5);
+      padding: 20px 12px 80px 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .ranking-sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    .ranking-sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .ranking-sidebar::-webkit-scrollbar-thumb {
+      background: rgba(203, 189, 154, 0.3);
+      border-radius: 2px;
+    }
+    
+    .ranking-sidebar .sidebar-box {
+      margin-bottom: 15px;
+    }
+    
+    .ranking-sidebar .sidebar-list {
+      gap: 8px;
+    }
+    
+    .ranking-sidebar .supporter-item-wrapper {
+      margin-bottom: 8px;
+    }
+    
+    .ranking-sidebar .sidebar-leader-section {
+      padding: 14px 12px;
+    }
+    
+    .ranking-sidebar .section-header {
+      padding: 12px 12px 8px 12px;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    
+    .ranking-sidebar .section-title {
+      font-size: 12px;
+    }
+    
+    .sidebar-toggle-input:checked ~ .ranking-sidebar {
+      right: 0;
+    }
+    
+    .sidebar-toggle-input:checked ~ .sidebar-toggle-btn {
+      right: 280px;
+    }
+    
+    .sidebar-toggle-input:checked ~ .sidebar-toggle-btn::before {
+      content: "►";
+    }
+    
+    /* Overlay do zamknięcia */
+    .sidebar-toggle-input:checked ~ label.sidebar-overlay {
+      display: block;
+    }
+  }
+}
+
 /* kontener rankingu */
 .ranking-wrapper {
   display: flex;
@@ -1240,7 +1444,7 @@ th[data-sort-col].sort-desc .sort-indicator::after {
   top: 0;
   width: 400px;
   height: 100vh;
-  background: rgba(10, 10, 10, 0.95);
+  background: rgba(10, 10, 10, 0.417);
   border-right: 2px solid rgba(255, 215, 0, 0.3);
   backdrop-filter: blur(8px);
   z-index: 1000;
@@ -1456,6 +1660,9 @@ th[data-sort-col].sort-desc .sort-indicator::after {
       </table>
     </div>
   </div>
+
+  <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle-input" style="display: none;">
+  <label for="sidebar-toggle" class="sidebar-toggle-btn"></label>
 
   <div class="ranking-sidebar">
     <!-- Contributors box -->
