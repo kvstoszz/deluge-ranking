@@ -336,13 +336,11 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
   }
   
   .table-wrapper {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
     overflow-x: auto;
     overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
     border-radius: 12px;
     position: relative;
     background: url('texture.png');
@@ -510,7 +508,7 @@ p, span, h1, h2, h3, h4, h5, h6, a, th, label, input {
   border-radius: 12px;
   backdrop-filter: blur(4px);
   border: 1px solid rgba(203, 189, 154, 0.2);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .sidebar-list {
